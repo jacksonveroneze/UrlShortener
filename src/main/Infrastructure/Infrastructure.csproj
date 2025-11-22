@@ -1,0 +1,44 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>UrlShortener.Infrastructure</AssemblyName>
+    <RootNamespace>UrlShortener.Infrastructure</RootNamespace>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Asp.Versioning.Http"/>
+    <PackageReference Include="CorrelationId"/>
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions"/>
+    <PackageReference Include="Mapster" />
+    <PackageReference Include="Mapster.DependencyInjection" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer"/>
+    <PackageReference Include="Serilog.Settings.Configuration"/>
+    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis"/>
+    
+
+    <PackageReference Include="Serilog.Sinks.Seq"/>
+    <PackageReference Include="Ben.BlockingDetector"/>
+
+    <PackageReference Include="prometheus-net.AspNetCore"/>
+    <PackageReference Include="prometheus-net.DotNetRuntime"/>
+
+    <PackageReference Include="JacksonVeroneze.NET.EntityFramework"/>
+    <PackageReference Include="JacksonVeroneze.NET.Logging"/>
+    
+
+    <PackageReference Include="EFCore.NamingConventions"/>
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL"/>
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.NetTopologySuite"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="System.ComponentModel.DataAnnotations"/>
+    <Using Include="System.Diagnostics.CodeAnalysis"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Application\Application.csproj" />
+    <ProjectReference Include="..\Domain\Domain.csproj" />
+  </ItemGroup>
+
+</Project>

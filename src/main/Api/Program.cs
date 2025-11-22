@@ -1,0 +1,29 @@
+using Serilog;
+using UrlShortener.Api.Extensions;
+
+try
+{
+    Log.Information("Starting application");
+
+    WebApplicationBuilder builder =
+        WebApplication.CreateSlimBuilder(args);
+
+    builder.Configure();
+
+    WebApplication app = builder.Build();
+
+    app.Configure();
+
+    await app.RunAsync();
+}
+catch (Exception ex)
+{
+    Log.Fatal(ex, "Host terminated unexpectedly");
+
+    throw;
+}
+finally
+{
+    Log.Information("Server Shutting down");
+    await Log.CloseAndFlushAsync();
+}

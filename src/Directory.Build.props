@@ -32,7 +32,7 @@
         <RunAnalyzersDuringBuild>true</RunAnalyzersDuringBuild>
         <RunAnalyzersDuringLiveAnalysis>true</RunAnalyzersDuringLiveAnalysis>
         <NoWarn>
-            $(NoWarn);
+            $(NoWarn);NU1904
         </NoWarn>
         <NoError>
             $(NoError);

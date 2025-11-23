@@ -53,7 +53,6 @@ internal static class WebApplicationBuilderExtensions
             })
             .AddApplicationServices()
             .AddMapper()
-            .AddMediator()
             .AddCached(appConfiguration)
             .AddDatabase(appConfiguration)
             .AddHealthChecks();

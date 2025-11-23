@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using UrlShortener.Domain.Aggregates;
+using UrlShortener.Domain.Aggregates.Url;
 using UrlShortener.Infrastructure.Extensions;
 using UrlShortener.Infrastructure.Mappings.Domain;
 
@@ -15,12 +15,12 @@ public class DefaultDbContext(
     {
         ArgumentNullException.ThrowIfNull(modelBuilder);
 
-        modelBuilder.ApplyConfiguration(new DriverMapping());
+        modelBuilder.HasDefaultSchema(Constants.SchemaName);
 
-        modelBuilder.ApplySoftDeleteQueryFilter<Driver>();
+        modelBuilder.ApplyConfiguration(new UrlMapping());
+
+        modelBuilder.ApplySoftDeleteQueryFilter<ShortUrl>();
 
         modelBuilder.IgnoreClass();
-
-        modelBuilder.HasDefaultSchema(Constants.SchemaName);
     }
 }

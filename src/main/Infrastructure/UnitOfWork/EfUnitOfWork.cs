@@ -1,4 +1,4 @@
-using UrlShortener.Application.Common.Interfaces;
+using UrlShortener.Application.Abstractions.Uow;
 using UrlShortener.Infrastructure.Contexts;
 
 namespace UrlShortener.Infrastructure.UnitOfWork;

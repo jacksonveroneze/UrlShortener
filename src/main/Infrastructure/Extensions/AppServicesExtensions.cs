@@ -1,11 +1,10 @@
 using Microsoft.Extensions.DependencyInjection;
-using UrlShortener.Application.Common.Interfaces;
-using UrlShortener.Application.Common.Interfaces.Repositories;
-using UrlShortener.Application.v1.Drivers.GetById;
+using UrlShortener.Application.Abstractions.Services;
+using UrlShortener.Application.Abstractions.Uow;
+using UrlShortener.Application.v1.Urls.Create;
 using UrlShortener.Domain.Repositories;
-using UrlShortener.Infrastructure.Mapper;
-using UrlShortener.Infrastructure.Repositories.Drivers;
-using UrlShortener.Infrastructure.System;
+using UrlShortener.Infrastructure.Repositories.ShortUrl;
+using UrlShortener.Infrastructure.Services;
 using UrlShortener.Infrastructure.UnitOfWork;
 
 namespace UrlShortener.Infrastructure.Extensions;
@@ -17,16 +16,17 @@ public static class AppServicesExtensions
         this IServiceCollection services)
     {
         // Common
-        services.AddScoped<IDataMapper, AutoMapperAdapter>();
+        services.AddScoped<IDataMapper, MapsterAdapter>();
         services.AddScoped<IDateTimeProvider, DateTimeProvider>();
+        services.AddScoped<IShortCodeGenerator, ShortCodeGenerator>();
+        services.AddScoped<IUrlSanitizer, UrlSanitizer>();
         services.AddScoped<IUnitOfWork, EfUnitOfWork>();
         
         // UseCases
-        services.AddScoped<IGetDriverByIdQueryHandler, GetDriverByIdQueryHandler>();
+        services.AddScoped<ICreateShortUrlUseCase, CreateShortUrlUseCase>();
 
         // Repositories
-        services.AddScoped<IDriverReadRepository, DriverReadRepository>();
-        services.AddScoped<IDriverRepository, DriverRepository>();
+        services.AddScoped<IShortUrlRepository, ShortUrlRepository>();
         
         return services;
     }

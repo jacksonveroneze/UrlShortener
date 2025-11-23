@@ -2,7 +2,7 @@ using CorrelationId;
 using Prometheus;
 using Scalar.AspNetCore;
 using Serilog;
-using UrlShortener.Api.Endpoints.v1.Drivers;
+using UrlShortener.Api.Endpoints.V1.Urls;
 
 namespace UrlShortener.Api.Extensions;
 
@@ -43,7 +43,7 @@ internal static class WebApplicationExtensions
         app.UseAuthentication();
         app.UseAuthorization();
 
-        app.AddDriversEndpoints();
+        app.AddUrlsEndpoints();
 
         app.Lifetime.ApplicationStarted.Register(() =>
             Log.Information(nameof(IHostApplicationLifetime

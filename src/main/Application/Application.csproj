@@ -8,7 +8,6 @@
   <ItemGroup>
     <PackageReference Include="FluentValidation"/>
     <PackageReference Include="Mapster" />
-    <PackageReference Include="MediatR"/>
     <PackageReference Include="JacksonVeroneze.NET.Result"/>
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
   </ItemGroup>
@@ -22,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="v1\Drivers\" />
+    <Folder Include="v1\Urls\" />
   </ItemGroup>
 
 </Project>

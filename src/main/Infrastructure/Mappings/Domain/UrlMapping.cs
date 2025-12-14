@@ -28,7 +28,7 @@ public class UrlMapping : IEntityTypeConfiguration<ShortUrl>
             .HasMaxLength(1_000)
             .IsRequired();
         
-        builder.Property(c => c.ExpiresdAt)
+        builder.Property(c => c.ExpiresAt)
             .HasColumnName("expires_at")
             .IsRequired();
 

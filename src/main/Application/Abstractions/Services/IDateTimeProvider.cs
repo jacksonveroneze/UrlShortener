@@ -2,7 +2,7 @@ namespace UrlShortener.Application.Abstractions.Services;
 
 public interface IDateTimeProvider
 {
-    public DateTime UtcNow { get; }
+    public DateTimeOffset UtcNow { get; }
 
     public DateTime Now { get; }
 

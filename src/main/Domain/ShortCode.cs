@@ -39,7 +39,7 @@ public sealed class ShortCode : IEquatable<ShortCode>
 
 
     public bool Equals(ShortCode? other)
-        => other is not null && ReferenceEquals(this, other) || (other is not null && Value == other.Value);
+        => other is not null && ReferenceEquals(this, other) || (other is not null && string.Equals(Value, other.Value, StringComparison.OrdinalIgnoreCase));
 
 
     public override bool Equals(object? obj) => obj is ShortCode sc && Equals(sc);

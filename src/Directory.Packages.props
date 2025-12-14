@@ -32,7 +32,6 @@
         <PackageVersion Include="JacksonVeroneze.NET.DomainObjects" Version="0.0.6"/>
         <PackageVersion Include="JacksonVeroneze.NET.Pagination" Version="1.1.8"/>
         <PackageVersion Include="JacksonVeroneze.NET.Result" Version="1.0.0"/>
-        <PackageVersion Include="JacksonVeroneze.NET.Logging" Version="1.0.5"/>
     </ItemGroup>
     <ItemGroup Label="Infrastructure">
         <PackageVersion Include="CorrelationId" Version="3.0.1"/>

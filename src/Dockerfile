@@ -1,7 +1,7 @@
 # =====================================================
 # Etapa 1: Build
 # =====================================================
-FROM mcr.microsoft.com/dotnet/sdk:9.0-alpine AS build
+FROM mcr.microsoft.com/dotnet/sdk:10.0-alpine AS build
 
 WORKDIR /src
 
@@ -36,7 +36,7 @@ RUN dotnet publish ./main/Api/Api.csproj \
 # =====================================================
 # Etapa Final: Imagem de Runtime
 # =====================================================
-FROM jacksonveroneze/aspnet:9.0-alpine AS runtime
+FROM jacksonveroneze/aspnet:10.0-ubuntu AS runtime
 
 ENV ASSEMBLY_NAME=UrlShortener.Api.dll
 

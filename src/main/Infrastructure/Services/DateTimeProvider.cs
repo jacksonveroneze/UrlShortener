@@ -14,16 +14,16 @@ internal sealed class DateTimeProvider : IDateTimeProvider
     private static readonly TimeZoneInfo TzInfo
         = GetTimeZoneInfo();
 
-    public DateTime UtcNow => DateTime.UtcNow;
+    public DateTimeOffset UtcNow => DateTime.UtcNow;
 
-    public DateTime Now => TimeZoneInfo
-        .ConvertTimeFromUtc(UtcNow, TzInfo);
+    public DateTimeOffset Now => TimeZoneInfo
+        .ConvertTime(UtcNow, TzInfo);
 
     public DateOnly DateNow =>
-        DateOnly.FromDateTime(Now);
+        DateOnly.FromDateTime(Now.LocalDateTime);
 
     public TimeOnly TimeNow =>
-        TimeOnly.FromDateTime(Now);
+        TimeOnly.FromDateTime(Now.LocalDateTime);
 
     private static TimeZoneInfo GetTimeZoneInfo()
     {

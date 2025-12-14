@@ -1,7 +1,7 @@
 # =====================================================
 # Etapa 1: Build
 # =====================================================
-FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:10.0-alpine AS build
 
 WORKDIR /src
 
@@ -23,7 +23,7 @@ RUN dotnet publish ./main/Api/Api.csproj \
 # =====================================================
 # Etapa Final: Imagem de Runtime
 # =====================================================
-FROM jacksonveroneze/aspnet:9.0-debian-1.4.1 AS runtime
+FROM jacksonveroneze/aspnet:10.0-ubuntu AS runtime
 
 ENV CORECLR_ENABLE_PROFILING=0
 ENV ASSEMBLY_NAME=UrlShortener.Api.dll

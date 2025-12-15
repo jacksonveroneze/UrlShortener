@@ -9,27 +9,26 @@ public static class ShortUrlFactory
         ShortCode? code,
         Uri originalUrl,
         DateTimeOffset? expiresdAt,
-        DateTimeOffset nowUtc,
-        ShortUrlPolicy policy)
+        DateTimeOffset nowUtc)
     {
         ArgumentNullException.ThrowIfNull(originalUrl);
-        ArgumentNullException.ThrowIfNull(policy);
+        // ArgumentNullException.ThrowIfNull(policy);
 
-        bool codeValid = policy.IsValidCode(code);
-        bool isValidExpiration = policy
-            .IsValidExpiration(nowUtc, expiresdAt);
-
-        if (!codeValid)
-        {
-            return Result<ShortUrl>.FromRuleViolation(
-                DomainErrors.ShortUrlErrors.InvalidCode);
-        }
-
-        if (!isValidExpiration)
-        {
-            return Result<ShortUrl>.FromRuleViolation(
-                DomainErrors.ShortUrlErrors.ExpirationOutOfRange);
-        }
+        // bool codeValid = policy.IsValidCode(code);
+        // bool isValidExpiration = policy
+        //     .IsValidExpiration(nowUtc, expiresdAt);
+        //
+        // if (!codeValid)
+        // {
+        //     return Result<ShortUrl>.FromRuleViolation(
+        //         DomainErrors.ShortUrlErrors.InvalidCode);
+        // }
+        //
+        // if (!isValidExpiration)
+        // {
+        //     return Result<ShortUrl>.FromRuleViolation(
+        //         DomainErrors.ShortUrlErrors.ExpirationOutOfRange);
+        // }
 
         return ShortUrl.Create(code, originalUrl, expiresdAt);
     }

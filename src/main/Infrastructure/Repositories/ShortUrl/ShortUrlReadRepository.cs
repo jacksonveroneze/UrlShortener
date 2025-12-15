@@ -1,0 +1,21 @@
+using JacksonVeroneze.NET.EntityFramework.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using UrlShortener.Application.Abstractions.Repositories;
+using UrlShortener.Infrastructure.Contexts;
+
+namespace UrlShortener.Infrastructure.Repositories.ShortUrl;
+
+[ExcludeFromCodeCoverage]
+public class ShortUrlReadRepository(
+    IEfCoreRepository<Domain.Aggregates.Url.ShortUrl, DefaultDbContext> service)
+    : IShortUrlReadRepository
+{
+    public Task<bool> ExistsByCodeAsync(
+        string code,
+        CancellationToken cancellationToken)
+    {
+        return service.DbSet.AnyAsync(
+            conf => conf.Code == code,
+            cancellationToken: cancellationToken);
+    }
+}

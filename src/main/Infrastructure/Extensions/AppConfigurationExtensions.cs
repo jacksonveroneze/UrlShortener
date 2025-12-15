@@ -1,6 +1,8 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using UrlShortener.Application.Common.Parameters;
+using UrlShortener.Domain.Aggregates.Url;
 using UrlShortener.Infrastructure.Configurations;
 
 namespace UrlShortener.Infrastructure.Extensions;
@@ -8,37 +10,43 @@ namespace UrlShortener.Infrastructure.Extensions;
 [ExcludeFromCodeCoverage]
 public static class AppConfigurationExtensions
 {
-    public static IServiceCollection AddAppConfigs(
-        this IServiceCollection services,
-        IConfiguration configuration)
+    extension(IServiceCollection services)
     {
-        ArgumentNullException.ThrowIfNull(configuration);
+        public IServiceCollection AddAppConfigs(IConfiguration configuration)
+        {
+            ArgumentNullException.ThrowIfNull(configuration);
 
-        services.AddConfiguration<AppConfiguration>(configuration);
+            services.AddConfiguration<AppConfiguration>(configuration);
+            
+            services.AddConfiguration<ShortCodeHashIdsOptions>(
+                configuration, ShortCodeHashIdsOptions.SectionName);
+            
+            services.AddConfiguration<UrlShortenerParameters>(
+                configuration, UrlShortenerParameters.SectionName);
 
-        return services;
-    }
+            return services;
+        }
 
-    private static IServiceCollection AddConfiguration<TParameterType>(
-        this IServiceCollection services,
-        IConfiguration configuration,
-        string? sectionName = null)
-        where TParameterType : class
-    {
-        ArgumentNullException.ThrowIfNull(configuration);
+        private IServiceCollection AddConfiguration<TParameterType>(
+            IConfiguration configuration,
+            string? sectionName = null)
+            where TParameterType : class
+        {
+            ArgumentNullException.ThrowIfNull(configuration);
 
-        IConfiguration section = string.IsNullOrEmpty(sectionName)
-            ? configuration
-            : configuration.GetSection(sectionName);
+            IConfiguration section = string.IsNullOrEmpty(sectionName)
+                ? configuration
+                : configuration.GetSection(sectionName);
 
-        services.AddOptions<TParameterType>()
-            .Bind(section)
-            .ValidateDataAnnotations()
-            .ValidateOnStart();
+            services.AddOptions<TParameterType>()
+                .Bind(section)
+                .ValidateDataAnnotations()
+                .ValidateOnStart();
 
-        services.AddScoped<TParameterType>(sp =>
-            sp.GetRequiredService<IOptionsMonitor<TParameterType>>().CurrentValue);
+            services.AddScoped<TParameterType>(sp =>
+                sp.GetRequiredService<IOptionsMonitor<TParameterType>>().CurrentValue);
 
-        return services;
+            return services;
+        }
     }
 }

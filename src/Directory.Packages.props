@@ -54,7 +54,7 @@
         <PackageVersion Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="9.0.5"/>
         <PackageVersion Include="Serilog.Sinks.Seq" Version="9.0.0"/>
         <PackageVersion Include="JacksonVeroneze.NET.Logging" Version="1.0.5"/>
-
+        <PackageVersion Include="Hashids.net" Version="1.7.0" />
 
     </ItemGroup>
 </Project>

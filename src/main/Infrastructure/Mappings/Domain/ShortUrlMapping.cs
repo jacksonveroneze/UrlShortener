@@ -5,7 +5,7 @@ using UrlShortener.Domain.Aggregates.Url;
 namespace UrlShortener.Infrastructure.Mappings.Domain;
 
 [ExcludeFromCodeCoverage]
-public class UrlMapping : IEntityTypeConfiguration<ShortUrl>
+public class ShortUrlMapping : IEntityTypeConfiguration<ShortUrl>
 {
     public void Configure(EntityTypeBuilder<ShortUrl> builder)
     {
@@ -14,20 +14,19 @@ public class UrlMapping : IEntityTypeConfiguration<ShortUrl>
         builder.ToTable("url");
 
         // Keys
-        builder.HasKey(c => c.Id);
+        builder.HasKey(c => c.Code);
 
-        // Indexes
-        //builder.HasIndex(c => c.Status);
-
-        // Properties
-        builder.Property(c => c.Id)
+        builder.Property(c => c.Code)
+            .HasColumnName("code")
+            .HasMaxLength(100)
+            .IsRequired()
             .ValueGeneratedNever();
-        
+
         builder.Property(c => c.OriginalUrl)
             .HasColumnName("original_url")
             .HasMaxLength(1_000)
             .IsRequired();
-        
+
         builder.Property(c => c.ExpiresAt)
             .HasColumnName("expires_at")
             .IsRequired();

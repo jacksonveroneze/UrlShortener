@@ -1,6 +1,6 @@
 namespace UrlShortener.Application.Abstractions.Repositories;
 
-public interface IUrlReadRepository
+public interface IShortUrlReadRepository
 {
     public Task<bool> ExistsByCodeAsync(
         string code,

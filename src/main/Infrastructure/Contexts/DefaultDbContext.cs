@@ -17,7 +17,7 @@ public class DefaultDbContext(
 
         modelBuilder.HasDefaultSchema(Constants.SchemaName);
 
-        modelBuilder.ApplyConfiguration(new UrlMapping());
+        modelBuilder.ApplyConfiguration(new ShortUrlMapping());
 
         modelBuilder.ApplySoftDeleteQueryFilter<ShortUrl>();
 

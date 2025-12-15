@@ -31,10 +31,10 @@ export const optionsDuration = {
     ]
 };
 
-export const options = optionsRamp;
+export const options = optionsIterations;
 
 // const baseUrl = 'http://localhost:7000/api/v1';
-const baseUrl = 'http://0.0.0.0:8080/url-shortener/api/v1';
+const baseUrl = 'http://127.0.0.1:8085/v1/urls';
 
 export default () => {
     group('Endpoint Driver', () => {

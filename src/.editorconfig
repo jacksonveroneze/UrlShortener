@@ -98,6 +98,7 @@ dotnet_diagnostic.S125.severity = suggestion
 # Remove
 dotnet_diagnostic.S125.severity = suggestion
 dotnet_diagnostic.S2094.severity = suggestion
+dotnet_diagnostic.CA1515.severity = none
 
 ########################################
 # Meziantou.MA0051 (métodos longos)

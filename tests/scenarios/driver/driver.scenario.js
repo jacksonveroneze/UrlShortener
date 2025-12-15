@@ -8,11 +8,11 @@ export default (baseUrl) => {
             driver.create(baseUrl, factoryHeaders(), 201);
         }
 
-        const idDriver = driver.create(baseUrl, factoryHeaders(), 201);
+        const result = driver.create(baseUrl, factoryHeaders(), 201);
         
-        driver.getPaged(baseUrl, factoryHeaders(), 200);
-        
-        driver.getById(baseUrl, factoryHeaders(), idDriver, 200);
+        // driver.getPaged(baseUrl, factoryHeaders(), 200);
+        //
+        // driver.getById(baseUrl, factoryHeaders(), idDriver, 200);
         // driver.activate(baseUrl, factoryHeaders(), idDriver);
         // driver.inactivate(baseUrl, factoryHeaders(), idDriver);
     });

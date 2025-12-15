@@ -5,8 +5,4 @@
     <PackageReference Include="JacksonVeroneze.NET.Result"/>
   </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Extensions\" />
-    </ItemGroup>
-
 </Project>

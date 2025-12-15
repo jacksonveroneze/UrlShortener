@@ -36,7 +36,7 @@ RUN dotnet publish ./main/Api/Api.csproj \
 # =====================================================
 # Etapa Final: Imagem de Runtime
 # =====================================================
-FROM jacksonveroneze/aspnet:10.0-ubuntu AS runtime
+FROM jacksonveroneze/aspnet:10.0-alpine-1.5.0 AS runtime
 
 ENV ASSEMBLY_NAME=UrlShortener.Api.dll
 

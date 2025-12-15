@@ -5,14 +5,11 @@ namespace UrlShortener.Domain.Aggregates.Url;
 
 public class ShortUrl : AggregateRoot
 {
-    public Guid Id { get; private set; }
+    public string Code { get; private set; } = null!;
 
-    public ShortCode Code { get; private set; } = null!;
-
-    public Uri? OriginalUrl { get; private set; }
+    public Uri OriginalUrl { get; private set; } = null!;
 
     public DateTimeOffset? ExpiresAt { get; private set; }
-
 
     #region ctor
 
@@ -28,8 +25,7 @@ public class ShortUrl : AggregateRoot
         ArgumentNullException.ThrowIfNull(originalUrl);
         ArgumentNullException.ThrowIfNull(code);
 
-        Id = Guid.CreateVersion7();
-        Code = code;
+        Code = code.Value;
         OriginalUrl = originalUrl;
         ExpiresAt = expiresAt;
     }

@@ -2,6 +2,7 @@ using JacksonVeroneze.NET.Result;
 using UrlShortener.Application.Abstractions.Repositories;
 using UrlShortener.Application.Abstractions.Services;
 using UrlShortener.Application.Abstractions.Uow;
+using UrlShortener.Application.Common.Parameters;
 using UrlShortener.Domain;
 using UrlShortener.Domain.Aggregates.Url;
 using UrlShortener.Domain.Core.Errors;
@@ -10,14 +11,13 @@ using UrlShortener.Domain.Repositories;
 namespace UrlShortener.Application.v1.Urls.Create;
 
 public sealed class CreateShortUrlUseCase(
-    IDataMapper mapper,
-    IUrlReadRepository urlReadRepository,
+    IShortUrlReadRepository shortUrlReadRepository,
     IShortUrlRepository urlRepository,
     IUnitOfWork unitOfWork,
-    IUrlSanitizer sanitizer,
-    IShortCodeGenerator codeGenerator,
+    IShortCodeService codeGenerator,
     IDateTimeProvider clock,
-    ShortUrlPolicy policy) : ICreateShortUrlUseCase
+    IUrlSanitizer sanitizer,
+    UrlShortenerParameters parameters) : ICreateShortUrlUseCase
 
 {
     public async Task<Result<CreateShortUrlOutput>> ExecuteAsync(
@@ -26,30 +26,63 @@ public sealed class CreateShortUrlUseCase(
     {
         ArgumentNullException.ThrowIfNull(request);
 
-        ShortCode code = await codeGenerator
+        string code = await codeGenerator
             .GenerateAsync(cancellationToken);
 
-        bool exists = await urlReadRepository
-            .ExistsByCodeAsync(code.Value, cancellationToken);
+        bool exists = await shortUrlReadRepository
+            .ExistsByCodeAsync(code, cancellationToken);
 
         if (exists)
         {
             return Result<CreateShortUrlOutput>.FromRuleViolation(
                 DomainErrors.ShortUrlErrors.ConflictAliasAlreadyInUse);
         }
-        
+
         Uri sanitizedUrl = sanitizer.Sanitize(request.OriginalUrl!);
 
         Result<ShortUrl> shortUrl = ShortUrlFactory.Create(
-            code, sanitizedUrl, request.ExpirationDate,
-            clock.UtcNow, policy);
+            ShortCode.Create(code),
+            sanitizedUrl,
+            request.ExpirationDate,
+            clock.UtcNow);
 
         await urlRepository.CreateAsync(shortUrl.Value!, cancellationToken);
         await unitOfWork.CommitAsync(cancellationToken);
 
-        CreateShortUrlOutput output = mapper.Map<
-            ShortUrl, CreateShortUrlOutput>(shortUrl.Value!);
+        Uri uri = ComposeShortenerUrl(code);
 
-        return Result<CreateShortUrlOutput>.WithSuccess(output);
+        CreateShortUrlOutput result =
+            ComposeOutput(code, uri, shortUrl.Value!);
+
+        return Result<CreateShortUrlOutput>.WithSuccess(result);
+    }
+
+    private Uri ComposeShortenerUrl(string code)
+    {
+        UriBuilder uriBuilder = new()
+        {
+            Scheme = parameters.Scheme!,
+            Host = parameters.BaseDomain!,
+            Query = $"{parameters.QueryStringName}={code}",
+        };
+
+        return uriBuilder.Uri;
+    }
+
+    private static CreateShortUrlOutput ComposeOutput(
+        string code, Uri uri, ShortUrl shortUrl)
+    {
+        CreateShortUrlOutput result = new()
+        {
+            Data = new ShortUrlOutput
+            {
+                Code = code,
+                CreationDate = DateTimeOffset.UtcNow,
+                ExpirationDate = shortUrl.ExpiresAt,
+                ShortenedUrl = uri,
+            },
+        };
+
+        return result;
     }
 }

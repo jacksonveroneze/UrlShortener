@@ -1,5 +1,6 @@
 using Serilog;
 using UrlShortener.Api.Extensions;
+using UrlShortener.Infrastructure.Extensions;
 
 try
 {

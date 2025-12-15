@@ -16,7 +16,7 @@
     <File Path="../infra/docker/.env" />
     <File Path="../infra/docker/docker-compose.development.yml" />
     <File Path="../infra/docker/docker-compose.yml" />
-    <File Path="../infra/docker/prometheus/config.yml" />
+    <File Path="../infra/docker/prometheus/prometheus-config.yml" />
     <File Path=".dockerignore" />
     <File Path="Dockerfile" />
     <File Path="Dockerfile.Development" />

@@ -1,13 +1,19 @@
 using UrlShortener.Application.Abstractions.Services;
-using UrlShortener.Domain;
 
 namespace UrlShortener.Application.Common.Services;
 
-public class ShortCodeGenerator : IShortCodeGenerator
+public class ShortCodeService(
+    IDistributedCounter counter,
+    IShortCodeGenerator generator) : IShortCodeService
 {
-    public Task<ShortCode> GenerateAsync(
+    public async Task<string> GenerateAsync(
         CancellationToken cancellationToken)
     {
-        throw new NotSupportedException();
+        long count = await counter
+            .NextAsync(cancellationToken);
+
+        string code = generator.Generate(count);
+
+        return code;
     }
 }

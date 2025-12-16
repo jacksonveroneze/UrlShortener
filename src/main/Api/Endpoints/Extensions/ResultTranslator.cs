@@ -14,54 +14,53 @@ internal static class ResultTranslator
             : CreateProblemDetailsResult(result);
     }
 
-    public static IResult ToIResult<T>(this Result<T> result)
+    extension<T>(Result<T> result)
     {
-        ArgumentNullException.ThrowIfNull(result);
-
-        if (!result.IsSuccess)
+        public IResult ToIResult()
         {
-            return CreateProblemDetailsResult(result);
+            ArgumentNullException.ThrowIfNull(result);
+
+            if (!result.IsSuccess)
+            {
+                return CreateProblemDetailsResult(result);
+            }
+
+            return result.Value is null
+                ? Results.NoContent()
+                : Results.Ok((object?)result.Value);
         }
 
-        return result.Value is null
-            ? Results.NoContent()
-            : Results.Ok(result.Value);
-    }
-
-    private static IResult ToCreatedResult<T>(
-        this Result<T> result,
-        Uri? locationUri = null)
-    {
-        ArgumentNullException.ThrowIfNull(result);
-
-        if (result.IsFailure)
+        private IResult ToCreatedResult(Uri? locationUri = null)
         {
-            return CreateProblemDetailsResult(result);
+            ArgumentNullException.ThrowIfNull(result);
+
+            if (result.IsFailure)
+            {
+                return CreateProblemDetailsResult(result);
+            }
+
+            return locationUri is not null
+                ? Results.Created(locationUri, (object?)result.Value)
+                : Results.StatusCode(StatusCodes.Status201Created);
         }
 
-        return locationUri is not null
-            ? Results.Created(locationUri, result.Value)
-            : Results.StatusCode(StatusCodes.Status201Created);
-    }
-
-    public static IResult ToCreatedResultFromRoute<T>(
-        this Result<T> result,
-        LinkGenerator linkGenerator,
-        HttpContext context,
-        string routeName,
-        object id)
-    {
-        ArgumentNullException.ThrowIfNull(result);
+        public IResult ToCreatedResultFromRoute(LinkGenerator linkGenerator,
+            HttpContext context,
+            string routeName,
+            object id)
+        {
+            ArgumentNullException.ThrowIfNull(result);
         
-        if (!result.IsSuccess)
-        {
-            return result.ToCreatedResult();
+            if (!result.IsSuccess)
+            {
+                return result.ToCreatedResult();
+            }
+
+            Uri uri = LocationBuilder.ForNamedRoute(
+                linkGenerator, context, routeName, id);
+
+            return result.ToCreatedResult(uri);
         }
-
-        Uri uri = LocationBuilder.ForNamedRoute(
-            linkGenerator, context, routeName, id);
-
-        return result.ToCreatedResult(uri);
     }
 
 

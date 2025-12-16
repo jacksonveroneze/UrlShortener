@@ -22,7 +22,7 @@ RUN dotnet publish ./main/Api/Api.csproj \
     --no-restore \
     --runtime linux-musl-x64 \
     /p:PublishReadyToRun=true \
-    /p:PublishTrimmed=true \
+    /p:PublishTrimmed=false \
     /p:TieredCompilation=true \
     /p:DebugType=None \
     /p:DebugSymbols=false \

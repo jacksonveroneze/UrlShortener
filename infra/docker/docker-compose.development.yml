@@ -1,6 +1,6 @@
 services:
   api:
-    image: 10.0.0.195:50000/url-shortener-api-dev:latest
+    image: url-shortener-api-dev:latest
     restart: unless-stopped
     build:
       context: ../../src

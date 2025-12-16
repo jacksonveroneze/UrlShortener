@@ -11,43 +11,44 @@ public static class DatabaseExtensions
 {
     private const int DefaultCommandTimeout = 5;
 
-    public static IServiceCollection AddDatabase(
-        this IServiceCollection services,
-        AppConfiguration appConfiguration)
+    extension(IServiceCollection services)
     {
-        ArgumentNullException.ThrowIfNull(appConfiguration);
-        ArgumentNullException.ThrowIfNull(appConfiguration.Database);
+        public IServiceCollection AddDatabase(AppConfiguration appConfiguration)
+        {
+            ArgumentNullException.ThrowIfNull(appConfiguration);
+            ArgumentNullException.ThrowIfNull(appConfiguration.Database);
+            ArgumentException.ThrowIfNullOrEmpty(appConfiguration.Database.WriteConnectionString);
+            ArgumentException.ThrowIfNullOrEmpty(appConfiguration.Database.ReadConnectionString);
 
-        services.AddRepository()
-            .InternalAddDatabase<DefaultDbContext>(
-                appConfiguration.Database.WriteConnectionString!)
-            .InternalAddDatabase<DefaultReadDbContext>(
-                appConfiguration.Database.ReadConnectionString!,
-                QueryTrackingBehavior.NoTracking);
+            services.AddRepository()
+                .InternalAddDatabase<DefaultDbContext>(
+                    appConfiguration.Database.WriteConnectionString!)
+                .InternalAddDatabase<DefaultReadDbContext>(
+                    appConfiguration.Database.ReadConnectionString!,
+                    QueryTrackingBehavior.NoTracking);
 
-        return services;
-    }
+            return services;
+        }
 
-    private static IServiceCollection InternalAddDatabase<TContext>(
-        this IServiceCollection services,
-        string connectionString,
-        QueryTrackingBehavior behavior = QueryTrackingBehavior.TrackAll)
-        where TContext : DbContext
-    {
-        ArgumentException.ThrowIfNullOrEmpty(connectionString);
+        private IServiceCollection InternalAddDatabase<TContext>(string connectionString,
+            QueryTrackingBehavior behavior = QueryTrackingBehavior.TrackAll)
+            where TContext : DbContext
+        {
+            ArgumentException.ThrowIfNullOrEmpty(connectionString);
 
-        services.AddDbContext<TContext>((_, options) =>
-            options.UseNpgsql(connectionString, conf =>
-                {
-                    conf.UseNetTopologySuite();
+            services.AddDbContext<TContext>((_, options) =>
+                options.UseNpgsql(connectionString, conf =>
+                    {
+                        conf.UseNetTopologySuite();
 
-                    conf.EnableRetryOnFailure()
-                        .CommandTimeout(DefaultCommandTimeout);
-                })
-                .UseQueryTrackingBehavior(behavior)
-                .ConfigureOptionsDatabase());
+                        conf.EnableRetryOnFailure()
+                            .CommandTimeout(DefaultCommandTimeout);
+                    })
+                    .UseQueryTrackingBehavior(behavior)
+                    .ConfigureOptionsDatabase());
 
-        return services;
+            return services;
+        }
     }
 
 

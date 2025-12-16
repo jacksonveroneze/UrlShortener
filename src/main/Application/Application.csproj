@@ -20,8 +20,4 @@
     <ProjectReference Include="..\Domain\Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="v1\Urls\" />
-  </ItemGroup>
-
 </Project>

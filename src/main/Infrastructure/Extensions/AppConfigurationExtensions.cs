@@ -2,7 +2,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using UrlShortener.Application.Common.Parameters;
-using UrlShortener.Domain.Aggregates.Url;
 using UrlShortener.Infrastructure.Configurations;
 
 namespace UrlShortener.Infrastructure.Extensions;

@@ -17,5 +17,9 @@ public static partial class DomainErrors
         public static Error ConflictAliasAlreadyInUse =>
             Error.Create("ShortUrl.Conflict",
                 $"The alias is already in use.");
+        
+        public static Error NotFound =>
+            Error.Create("ShortUrl.NotFound",
+                $"The shortUrl not found");
     }
 }

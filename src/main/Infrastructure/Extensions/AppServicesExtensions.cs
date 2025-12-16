@@ -4,6 +4,7 @@ using UrlShortener.Application.Abstractions.Services;
 using UrlShortener.Application.Abstractions.Uow;
 using UrlShortener.Application.Common.Services;
 using UrlShortener.Application.v1.Urls.Create;
+using UrlShortener.Application.v1.Urls.GetById;
 using UrlShortener.Domain.Repositories;
 using UrlShortener.Infrastructure.Repositories.ShortUrl;
 using UrlShortener.Infrastructure.Services;
@@ -30,6 +31,7 @@ public static class AppServicesExtensions
 
         // UseCases
         services.AddScoped<ICreateShortUrlUseCase, CreateShortUrlUseCase>();
+        services.AddScoped<IGetByIdShortUrlUseCase, GetByIdShortUrlUseCase>();
 
         // Repositories
         services.AddScoped<IShortUrlReadRepository, ShortUrlReadRepository>();

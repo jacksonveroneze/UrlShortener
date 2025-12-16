@@ -1,7 +1,7 @@
 services:
   load_balancer:
     container_name: loadbalancer
-    image: traefik:v3.5
+    image: traefik:v3.6
     restart: unless-stopped
     tty: true
     command:
@@ -77,7 +77,7 @@ services:
           memory: 256M
   
   api:
-    image: 10.0.0.195:50000/url-shortener:latest
+    image: url-shortener-api:latest
     restart: unless-stopped
     build:
       context: ../../src
@@ -102,8 +102,8 @@ services:
       # Middlewares definitions
       - traefik.http.middlewares.strip-prefix.stripprefix.prefixes=/url-shortener
       - traefik.http.middlewares.compress.compress=true
-      - traefik.http.middlewares.rate-limit.ratelimit.average=10000
-      - traefik.http.middlewares.rate-limit.ratelimit.burst=50
+      - traefik.http.middlewares.rate-limit.ratelimit.average=100000
+      - traefik.http.middlewares.rate-limit.ratelimit.burst=500
       - traefik.http.middlewares.rate-limit.ratelimit.period=1s
       - traefik.http.middlewares.body-limit.buffering.maxRequestBodyBytes=2000000
       - traefik.http.middlewares.retry.retry.attempts=3
@@ -111,7 +111,7 @@ services:
       - traefik.http.middlewares.circuit-breaker.circuitbreaker.expression=LatencyAtQuantileMS(95.0) > 5000
 
       # Apply middlewares
-      - traefik.http.routers.api_service.middlewares=strip-prefix,compress,rate-limit,body-limit,retry,circuit-breaker
+      - traefik.http.routers.api_service.middlewares=strip-prefix,compress,rate-limit,body-limit,retry
     networks:
       - url-shortener-service
     logging:
@@ -120,7 +120,7 @@ services:
         max-file: "2"
         max-size: "1m"
     deploy:
-      replicas: 2
+      replicas: 1
       resources:
         limits:
           cpus: '1'
@@ -133,7 +133,7 @@ services:
 
   prometheus:
     container_name: prometheus
-    image: bitnami/prometheus:latest
+    image: prom/prometheus:latest
     restart: unless-stopped
     ports:
       - "19090:9090"
@@ -149,7 +149,52 @@ services:
       retries: 3
       start_period: 5s
     volumes:
-      - ./prometheus/config.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/prometheus-config.yml:/etc/prometheus/prometheus.yml
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "2"
+        max-size: "1m"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 256M
+        reservations:
+          cpus: '0.50'
+          memory: 256M
+
+  otel-collector:
+    image: otel/opentelemetry-collector:0.139.0@sha256:8ac5df2a931e9264667b236d65bf7591fa4ba633a7a634e6caa2f0a4fc549c07
+    command: [ "--config=/etc/otel-collector.yaml" ]
+    volumes:
+      - ./otel-collector.yaml:/etc/otel-collector.yaml
+    networks:
+      - url-shortener-service
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "2"
+        max-size: "1m"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 256M
+        reservations:
+          cpus: '0.50'
+          memory: 256M
+
+  tempo:
+    image: grafana/tempo:latest
+    command: [ "-config.file=/etc/tempo.yaml" ]
+    volumes:
+      - ./tempo.yaml:/etc/tempo.yaml
+    ports:
+      - "3200:3200" # tempo
+      - "4317:4317" # otlp grpc
+    networks:
+      - url-shortener-service
     logging:
       driver: "json-file"
       options:

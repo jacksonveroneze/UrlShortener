@@ -56,5 +56,16 @@
         <PackageVersion Include="JacksonVeroneze.NET.Logging" Version="1.0.5"/>
         <PackageVersion Include="Hashids.net" Version="1.7.0" />
 
+        <PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="1.12.0" />
+        <PackageVersion Include="OpenTelemetry.Instrumentation.Process" Version="1.11.0-beta.2" />
+        <PackageVersion Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.12.0" />
+        <PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="1.12.0" />
+        <PackageVersion Include="OpenTelemetry.Instrumentation.Runtime" Version="1.12.0" />
+        <PackageVersion Include="OpenTelemetry.Instrumentation.EntityFrameworkCore" Version="1.0.0-beta.8" />
+        <PackageVersion Include="OpenTelemetry.Instrumentation.StackExchangeRedis" Version="1.0.0-rc9.12" />
+        <PackageVersion Include="OpenTelemetry.Exporter.Jaeger" Version="1.5.1" />
+        <PackageVersion Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.12.0" />
+        <PackageVersion Include="OpenTelemetry.Exporter.Prometheus.AspNetCore" Version="1.7.0-rc.1" />
+
     </ItemGroup>
 </Project>

@@ -1,9 +1,10 @@
 using Mapster;
+using UrlShortener.Application.v1.Urls.Common.Models;
 using UrlShortener.Domain.Aggregates.Url;
 
-namespace UrlShortener.Application.v1.Urls.Create;
+namespace UrlShortener.Application.v1.Urls.Common.Mappings;
 
-public class CreateShortUrlMappings : IRegister
+public class ShortUrlMappings : IRegister
 {
     public void Register(TypeAdapterConfig config)
     {
@@ -14,8 +15,5 @@ public class CreateShortUrlMappings : IRegister
             .Map(dest => dest.CreationDate, src => src.CreatedAt)
             .Map(dest => dest.ExpirationDate, src => src.ExpiresAt)
             .Ignore(dest => dest.ShortenedUrl);
-
-        config.NewConfig<ShortUrl, CreateShortUrlOutput>()
-            .Map(dest => dest.Data, src => src);
     }
 }

@@ -25,7 +25,7 @@ internal sealed class CustomExceptionHandler(
                 Status = exception switch
                 {
                     ArgumentException => StatusCodes.Status400BadRequest,
-                    _ => defaultStatus
+                    _ => defaultStatus,
                 },
             },
         };

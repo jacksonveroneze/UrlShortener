@@ -1,4 +1,4 @@
-namespace UrlShortener.Application.v1.Urls.Create;
+namespace UrlShortener.Application.v1.Urls.Common.Models;
 
 public sealed record ShortUrlOutput
 {

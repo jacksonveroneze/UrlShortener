@@ -13,7 +13,8 @@ internal static class RouteMappings
         RouteGroupBuilder builder = RouteGroupBuilderFactory
             .Factory(app, Resource, Version);
 
-        builder.AddCreate();
+        builder.AddCreate()
+            .AddGetById();
 
         return app;
     }

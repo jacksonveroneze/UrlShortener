@@ -1,5 +1,4 @@
 using JacksonVeroneze.NET.Result;
-using UrlShortener.Domain.Core.Errors;
 
 namespace UrlShortener.Domain.Aggregates.Url;
 

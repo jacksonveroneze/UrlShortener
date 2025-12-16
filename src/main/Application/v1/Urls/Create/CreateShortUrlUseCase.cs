@@ -3,6 +3,7 @@ using UrlShortener.Application.Abstractions.Repositories;
 using UrlShortener.Application.Abstractions.Services;
 using UrlShortener.Application.Abstractions.Uow;
 using UrlShortener.Application.Common.Parameters;
+using UrlShortener.Application.v1.Urls.Common.Models;
 using UrlShortener.Domain;
 using UrlShortener.Domain.Aggregates.Url;
 using UrlShortener.Domain.Core.Errors;
@@ -11,7 +12,6 @@ using UrlShortener.Domain.Repositories;
 namespace UrlShortener.Application.v1.Urls.Create;
 
 public sealed class CreateShortUrlUseCase(
-    IShortUrlReadRepository shortUrlReadRepository,
     IShortUrlRepository urlRepository,
     IUnitOfWork unitOfWork,
     IShortCodeService codeGenerator,
@@ -28,15 +28,6 @@ public sealed class CreateShortUrlUseCase(
 
         string code = await codeGenerator
             .GenerateAsync(cancellationToken);
-
-        bool exists = await shortUrlReadRepository
-            .ExistsByCodeAsync(code, cancellationToken);
-
-        if (exists)
-        {
-            return Result<CreateShortUrlOutput>.FromRuleViolation(
-                DomainErrors.ShortUrlErrors.ConflictAliasAlreadyInUse);
-        }
 
         Uri sanitizedUrl = sanitizer.Sanitize(request.OriginalUrl!);
 

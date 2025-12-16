@@ -46,15 +46,12 @@ internal static class WebApplicationBuilderExtensions
                 .AddHttpContextAccessor()
                 .AddCultureConfiguration()
                 .AddAppVersioning()
-                .AddRouting(options =>
-                {
-                    options.LowercaseUrls = true;
-                    options.LowercaseQueryStrings = true;
-                })
+                .AddRouting()
                 .AddApplicationServices()
                 .AddMapper()
                 .AddCached(appConfiguration)
                 .AddRedisConnectionMultiplexer(appConfiguration)
+                .AddOpenTelemetry(appConfiguration)
                 .AddDatabase(appConfiguration)
                 .AddHealthChecks();
 

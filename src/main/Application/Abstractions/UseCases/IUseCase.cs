@@ -2,14 +2,14 @@ using JacksonVeroneze.NET.Result;
 
 namespace UrlShortener.Application.Abstractions.UseCases;
 
-public interface IUseCase<TRequest, TResponse> 
+public interface IBaseRequest;
+
+public interface IResponse;
+
+public interface IUseCase<in TRequest, TResponse>
     where TRequest : IBaseRequest
-    where TResponse : Result
 {
-    Task<TResponse> ExecuteAsync(
+    Task<Result<TResponse>> ExecuteAsync(
         TRequest request,
         CancellationToken cancellationToken);
 }
-
-public interface IBaseRequest;
-public interface IResponse;

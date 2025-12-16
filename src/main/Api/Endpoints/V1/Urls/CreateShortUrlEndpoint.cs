@@ -13,13 +13,19 @@ internal static class CreateShortUrlEndpoint
         builder.MapPost(string.Empty, async (
                 [FromServices] ICreateShortUrlUseCase useCase,
                 [FromServices] LinkGenerator linkGenerator,
-                [FromBody] CreateShortUrlInput request,
+                [FromBody] CreateShortUrlInput input,
+                HttpContext httpContext,
                 CancellationToken cancellationToken) =>
             {
-                Result<CreateShortUrlOutput> response =
-                    await useCase.ExecuteAsync(request, cancellationToken);
+                Result<CreateShortUrlOutput> output =
+                    await useCase.ExecuteAsync(input, cancellationToken);
 
-                return Results.Created(string.Empty, response.Value);
+                return output.ToCreatedResultFromRoute(
+                    linkGenerator,
+                    httpContext,
+                    RouteNames.GetShortUrlById,
+                    output.Value?.Data?.Code!
+                );
             })
             .Produces<CreateShortUrlOutput>(
                 statusCode: StatusCodes.Status201Created)

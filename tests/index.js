@@ -43,8 +43,8 @@ export const optionsDuration = {
 
 export const options = optionsDuration;
 
-const baseUrl = 'http://127.0.0.1:7000/v1';
-// const baseUrl = 'http://127.0.0.1:8080/url-shortener/v1';
+// const baseUrl = 'http://127.0.0.1:7000/v1';
+const baseUrl = 'http://127.0.0.1:8080/url-shortener/v1';
 
 export default () => {
    

@@ -49,3 +49,19 @@ export function getById(baseUrl, headers, id, statusCodeDefault = null) {
 
     return response;
 }
+
+
+export function health(baseUrl, headers) {
+    const params = {
+        headers: headers,
+        tags: {
+            kind: 'read',
+        },
+    };
+    
+    const response = http.get(`${baseUrl}/health`, params);
+
+    check(response, {'[Url] - getById - status is 200': (r) => r.status === 200});
+
+    return response;
+}

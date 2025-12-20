@@ -1,6 +1,7 @@
 import {group} from 'k6';
 import * as driver from "./scenarios/driver/driver.js";
 import {factoryHeaders} from "./scenarios/util.js";
+import {health} from "./scenarios/driver/driver.js";
 
 export let optionsRamp = {
     stages: [
@@ -31,9 +32,8 @@ export const optionsIterations = {
 
 export const optionsDuration = {
     stages: [
-        {duration: '10s', target: 25},
-        {duration: '10s', target: 200},
-        {duration: '30s', target: 200}
+        {duration: '2s', target: 1},
+        {duration: '30s', target: 300}
     ],
     thresholds: {
         'http_req_duration{kind:write}': ['p(95)<300'],
@@ -43,21 +43,21 @@ export const optionsDuration = {
 
 export const options = optionsDuration;
 
-// const baseUrl = 'http://127.0.0.1:7000/v1';
-const baseUrl = 'http://127.0.0.1:8080/url-shortener/v1';
+// const baseUrl = 'http://172.19.0.8:8080';
+const baseUrl = 'http://127.0.0.1:8080/url-shortener-read/v1';
 
 export default () => {
-   
+   // driver.health(baseUrl, factoryHeaders());
+    driver.getById(baseUrl, factoryHeaders(), "xZRYP7x", 200);
     
     
-    group('Endpoint Driver', () => {
-        const result = driver.create(baseUrl, factoryHeaders(), 201);
-
-        if (result.data.code) {
-
-            for (let i = 0; i < 10; i++) {
-                driver.getById(baseUrl, factoryHeaders(), result.data.code, 200);
-            }
-        }
-    });
+    // group('Endpoint Driver', () => {
+    //     const result = driver.create(baseUrl, factoryHeaders(), 201);
+    //
+    //     if (result.data.code) {
+    //         for (let i = 0; i < 10; i++) {
+    //             driver.getById(baseUrl, factoryHeaders(), result.data.code, 200);
+    //         }
+    //     }
+    // });
 }

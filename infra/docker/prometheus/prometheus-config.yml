@@ -13,11 +13,20 @@ scrape_configs:
         type: "A"
         port: 8082
 
-  - job_name: api
+  - job_name: api_write
     honor_timestamps: true
     metrics_path: /metrics
     scheme: http
     dns_sd_configs:
-      - names: ["api"]
+      - names: ["api-write"]
+        type: "A"
+        port: 8080
+        
+  - job_name: api_read
+    honor_timestamps: true
+    metrics_path: /metrics
+    scheme: http
+    dns_sd_configs:
+      - names: ["api-read"]
         type: "A"
         port: 8080

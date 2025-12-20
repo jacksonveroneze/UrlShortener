@@ -7,7 +7,7 @@ namespace UrlShortener.Infrastructure.Repositories.ShortUrl;
 
 [ExcludeFromCodeCoverage]
 public class ShortUrlReadRepository(
-    IEfCoreRepository<Domain.Aggregates.Url.ShortUrl, DefaultReadDbContext> service)
+    IEfCoreRepository<Domain.Aggregates.Url.ShortUrl, DefaultDbContext> service)
     : IShortUrlReadRepository
 {
     public Task<bool> ExistsByCodeAsync(

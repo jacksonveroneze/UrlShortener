@@ -7,6 +7,7 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <PublishAot>false</PublishAot>
+        <SatelliteResourceLanguages>pt-BR</SatelliteResourceLanguages>
     </PropertyGroup>
 
     <PropertyGroup>

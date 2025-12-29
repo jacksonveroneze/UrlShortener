@@ -33,7 +33,7 @@ export const optionsIterations = {
 export const optionsDuration = {
     stages: [
         {duration: '2s', target: 1},
-        {duration: '30s', target: 300}
+        {duration: '240s', target: 100}
     ],
     thresholds: {
         'http_req_duration{kind:write}': ['p(95)<300'],
@@ -44,20 +44,20 @@ export const optionsDuration = {
 export const options = optionsDuration;
 
 // const baseUrl = 'http://172.19.0.8:8080';
-const baseUrl = 'http://127.0.0.1:8080/url-shortener-read/v1';
+const baseUrl = 'http://127.0.0.1:8080';
 
 export default () => {
    // driver.health(baseUrl, factoryHeaders());
-    driver.getById(baseUrl, factoryHeaders(), "xZRYP7x", 200);
+   //  driver.getById(baseUrl, factoryHeaders(), "xZRYP7x", 200);
     
     
-    // group('Endpoint Driver', () => {
-    //     const result = driver.create(baseUrl, factoryHeaders(), 201);
-    //
-    //     if (result.data.code) {
-    //         for (let i = 0; i < 10; i++) {
-    //             driver.getById(baseUrl, factoryHeaders(), result.data.code, 200);
-    //         }
-    //     }
-    // });
+    group('Endpoint Driver', () => {
+        const result = driver.create(baseUrl, factoryHeaders(), 201);
+
+        if (result.data.code) {
+            for (let i = 0; i < 100; i++) {
+                driver.getById(baseUrl, factoryHeaders(), result.data.code, 200);
+            }
+        }
+    });
 }

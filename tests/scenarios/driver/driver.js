@@ -15,7 +15,7 @@ export function create(baseUrl, headers) {
         expirationDate: '2026-05-12T12:20:00+00:00'
     });
 
-    const response = http.post(`${baseUrl}/urls`, body, params);
+    const response = http.post(`${baseUrl}/url-shortener-write/v1/urls`, body, params);
     check(response, {'[Url] - Created - status is 201': (r) => r.status === 201});
 
     if (response.status !== 201) {
@@ -36,7 +36,7 @@ export function getById(baseUrl, headers, id, statusCodeDefault = null) {
         },
     };
     
-    const response = http.get(`${baseUrl}/urls?id=${id}`, params);
+    const response = http.get(`${baseUrl}/url-shortener-read/v1/urls?id=${id}`, params);
 
     check(response, {'[Url] - getById - status is 200': (r) => r.status === 200});
 

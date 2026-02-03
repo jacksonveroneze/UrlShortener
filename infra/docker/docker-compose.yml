@@ -122,11 +122,11 @@ services:
         max-file: "2"
         max-size: "1m"
     deploy:
-      replicas: 2
+      replicas: 1
       resources:
         limits:
-          cpus: '1'
-          memory: '512M'
+          cpus: '2'
+          memory: '1024M'
           pids: 100
         reservations:
           cpus: '1'
@@ -177,14 +177,15 @@ services:
         max-file: "2"
         max-size: "1m"
     deploy:
-      replicas: 4
+      replicas: 1
       resources:
         limits:
           cpus: '2'
           memory: '1024M'
+          pids: 100
         reservations:
-          cpus: '2'
-          memory: '1024M'
+          cpus: '1'
+          memory: '512M'
 
   prometheus:
     container_name: prometheus

@@ -3,12 +3,6 @@ namespace UrlShortener.Infrastructure.Configurations;
 [ExcludeFromCodeCoverage]
 public sealed record AppConfiguration
 {
-    private const string EnviromentDevelopment = "Development";
-    private const string EnviromentProduction = "Production";
-
-    [Required]
-    public string? Environment { get; init; }
-
     public AppInfoConfiguration? Application { get; init; }
 
     public DistributedTracingConfiguration? DistributedTracing { get; init; }
@@ -24,12 +18,4 @@ public sealed record AppConfiguration
 
     public Version AppVersion =>
         Application!.Version!;
-
-    public bool IsDevelopment =>
-        Environment!.Equals(EnviromentDevelopment,
-            StringComparison.OrdinalIgnoreCase);
-
-    public bool IsProduction =>
-        Environment!.Equals(EnviromentProduction,
-            StringComparison.OrdinalIgnoreCase);
 }

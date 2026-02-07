@@ -1,43 +1,51 @@
 # =====================================================
-# Etapa 1: Build
+# Build + Publish
 # =====================================================
-FROM mcr.microsoft.com/dotnet/sdk:10.0-alpine AS build
-
+FROM mcr.microsoft.com/dotnet/sdk:10.0-noble AS publish
 WORKDIR /src
+
+COPY ./main/Api/Api.csproj ./main/Api/
+COPY ./main/Application/Application.csproj ./main/Application/
+COPY ./main/Domain/Domain.csproj ./main/Domain/
+COPY ./main/Infrastructure/Infrastructure.csproj ./main/Infrastructure/
+COPY ./main/CrossCutting/CrossCutting.csproj ./main/CrossCutting/
+COPY *.sln ./
+COPY nuget.config ./
+COPY Directory.Build.props ./
+COPY Directory.Packages.props ./
+
+RUN dotnet restore ./main/Api/Api.csproj \
+    -r linux-x64 \
+    -p:PublishReadyToRun=true
 
 COPY . .
 
-RUN dotnet restore ./main/Api/Api.csproj \
-    --runtime linux-musl-x64 \
-    /p:PublishReadyToRun=true
-
-# =====================================================
-# Etapa 2: Publicação
-# =====================================================
-FROM build AS publish
-
 RUN dotnet publish ./main/Api/Api.csproj \
-    --configuration Release \
-    --output /publish \
+    -c Release \
+    -r linux-x64 \
+    --self-contained false \
     --no-restore \
-    --runtime linux-musl-x64 \
-    /p:PublishReadyToRun=true \
-    /p:PublishTrimmed=false \
-    /p:TieredCompilation=true \
-    /p:DebugType=None \
-    /p:DebugSymbols=false \
-    /p:PublishSingleFile=false \
-    /p:EnableCompressionInSingleFile=false \
-    /p:IncludeAllLocalesForSelfContained=false \
-    /p:Optimize=true \
-    /p:PublishCrossgen2=true \
-    /p:PublishContainer
+    -p:PublishReadyToRun=true \
+    -p:PublishTrimmed=false \
+    -p:DebugType=None \
+    -p:DebugSymbols=false \
+    --output /publish
 
 # =====================================================
 # Etapa Final: Imagem de Runtime
 # =====================================================
-FROM jacksonveroneze/aspnet:10.0-alpine-1.5.0 AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:10.0-noble-chiseled-extra AS runtime
 
-ENV ASSEMBLY_NAME=UrlShortener.Api.dll
+ENV ASPNETCORE_ENVIRONMENT=Production \
+    DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false \
+    CORECLR_ENABLE_PROFILING=0 \
+    TZ=America/Sao_Paulo \
+    LANG=pt_BR.UTF-8 \
+    LANGUAGE=pt_BR.UTF-8 \
+    LC_ALL=pt_BR.UTF-8
 
 COPY --from=publish /publish .
+
+USER $APP_UID
+
+ENTRYPOINT ["dotnet", "Api.dll"]

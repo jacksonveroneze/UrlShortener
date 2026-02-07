@@ -28,6 +28,7 @@
     <File Path="../tests/scenarios/driver/driver.js" />
     <File Path="../tests/scenarios/driver/driver.scenario.js" />
     <File Path="../tests/scenarios/util.js" />
+    <File Path="..\tests\k6.env" />
   </Folder>
   <Folder Name="/src/">
     <Project Path="main/Api/Api.csproj" />

@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <AssemblyName>UrlShortener.Domain</AssemblyName>
     <RootNamespace>UrlShortener.Domain</RootNamespace>
   </PropertyGroup>
   

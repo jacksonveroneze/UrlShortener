@@ -44,7 +44,7 @@ services:
       - traefik.http.routers.dashboard.entrypoints=traefik
       - traefik.http.routers.dashboard.service=api@internal
     healthcheck:
-      test: traefik healthcheck --ping
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:8081/ping >/dev/null 2>&1 || exit 1"]
       interval: 15s
       timeout: 3s
       retries: 3
@@ -72,8 +72,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '2'
-          memory: 1024M
+          cpus: '3'
+          memory: 2048M
         reservations:
           cpus: '2'
           memory: 1024M
@@ -125,8 +125,8 @@ services:
       replicas: 1
       resources:
         limits:
-          cpus: '2'
-          memory: '1024M'
+          cpus: '1'
+          memory: '512M'
           pids: 100
         reservations:
           cpus: '1'
@@ -180,12 +180,13 @@ services:
       replicas: 1
       resources:
         limits:
-          cpus: '2'
-          memory: '1024M'
+          cpus: '1'
+          memory: '512M'
           pids: 100
         reservations:
           cpus: '1'
           memory: '512M'
+      mode: replicated
 
   prometheus:
     container_name: prometheus
@@ -199,7 +200,7 @@ services:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--web.enable-lifecycle'
     healthcheck:
-      test: curl --silent --fail http://localhost:9093/status || exit 1
+      test: curl --silent --fail http://localhost:9090/status || exit 1
       interval: 30s
       timeout: 3s
       retries: 3

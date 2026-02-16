@@ -34,18 +34,8 @@ RUN dotnet publish ./main/Api/Api.csproj \
 # =====================================================
 # Etapa Final: Imagem de Runtime
 # =====================================================
-FROM mcr.microsoft.com/dotnet/aspnet:10.0-noble-chiseled-extra AS runtime
-
-ENV ASPNETCORE_ENVIRONMENT=Production \
-    DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false \
-    CORECLR_ENABLE_PROFILING=0 \
-    TZ=America/Sao_Paulo \
-    LANG=pt_BR.UTF-8 \
-    LANGUAGE=pt_BR.UTF-8 \
-    LC_ALL=pt_BR.UTF-8
+FROM jacksonveroneze/aspnet:10.0-ubuntu-noble-chiseled-extra-latest AS runtime
 
 COPY --from=publish /publish .
-
-USER $APP_UID
 
 ENTRYPOINT ["dotnet", "Api.dll"]

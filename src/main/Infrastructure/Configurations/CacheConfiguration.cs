@@ -11,5 +11,5 @@ public sealed record CacheConfiguration
 public enum CacheType
 {
     Memory,
-    Redis
+    Distributed
 }

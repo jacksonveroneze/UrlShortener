@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using JacksonVeroneze.NET.DomainObjects.Domain;
 using JacksonVeroneze.NET.Result;
 
@@ -5,14 +6,15 @@ namespace UrlShortener.Domain.Aggregates.Url;
 
 public class ShortUrl : AggregateRoot
 {
-    public string Code { get; private set; } = null!;
+    public string Code { get; init; } = null!;
 
-    public Uri OriginalUrl { get; private set; } = null!;
+    public Uri OriginalUrl { get; init; } = null!;
 
-    public DateTimeOffset? ExpiresAt { get; private set; }
+    public DateTimeOffset? ExpiresAt { get; init; }
 
     #region ctor
 
+    [JsonConstructor]
     protected ShortUrl()
     {
     }

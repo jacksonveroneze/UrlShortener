@@ -3,13 +3,13 @@
   <PropertyGroup>
     <RootNamespace>UrlShortener.Infrastructure</RootNamespace>
   </PropertyGroup>
-  
+
   <ItemGroup>
     <PackageReference Include="Asp.Versioning.Http"/>
     <PackageReference Include="CorrelationId"/>
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions"/>
-    <PackageReference Include="Mapster" />
-    <PackageReference Include="Mapster.DependencyInjection" />
+    <PackageReference Include="Mapster"/>
+    <PackageReference Include="Mapster.DependencyInjection"/>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer"/>
     <PackageReference Include="Serilog.Settings.Configuration"/>
     <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis"/>
@@ -23,11 +23,17 @@
     <PackageReference Include="JacksonVeroneze.NET.EntityFramework"/>
     <PackageReference Include="JacksonVeroneze.NET.Logging"/>
 
-    <PackageReference Include="Hashids.Net" />
+    <PackageReference Include="Hashids.Net"/>
 
     <PackageReference Include="EFCore.NamingConventions"/>
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL"/>
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.NetTopologySuite"/>
+
+    <PackageReference Include="ZiggyCreatures.FusionCache"/>
+    <PackageReference Include="ZiggyCreatures.FusionCache.Backplane.StackExchangeRedis"/>
+    <PackageReference Include="ZiggyCreatures.FusionCache.Serialization.CysharpMemoryPack"/>
+    <PackageReference Include="ZiggyCreatures.FusionCache.Serialization.NeueccMessagePack"/>
+    <PackageReference Include="ZiggyCreatures.FusionCache.Serialization.SystemTextJson"/>
 
     <PackageReference Include="OpenTelemetry.Extensions.Hosting"/>
     <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore"/>
@@ -46,8 +52,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Application\Application.csproj" />
-    <ProjectReference Include="..\Domain\Domain.csproj" />
+    <ProjectReference Include="..\Application\Application.csproj"/>
+    <ProjectReference Include="..\Domain\Domain.csproj"/>
   </ItemGroup>
 
 </Project>

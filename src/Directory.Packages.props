@@ -56,6 +56,12 @@
         <PackageVersion Include="JacksonVeroneze.NET.Logging" Version="1.0.5"/>
         <PackageVersion Include="Hashids.net" Version="1.7.0" />
 
+        <PackageVersion Include="ZiggyCreatures.FusionCache" Version="2.4.0" />
+        <PackageVersion Include="ZiggyCreatures.FusionCache.Backplane.StackExchangeRedis" Version="2.4.0" />
+        <PackageVersion Include="ZiggyCreatures.FusionCache.Serialization.CysharpMemoryPack" Version="2.4.0" />
+        <PackageVersion Include="ZiggyCreatures.FusionCache.Serialization.NeueccMessagePack" Version="2.4.0" />
+        <PackageVersion Include="ZiggyCreatures.FusionCache.Serialization.SystemTextJson" Version="2.4.0" />
+
         <PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="1.12.0" />
         <PackageVersion Include="OpenTelemetry.Instrumentation.Process" Version="1.11.0-beta.2" />
         <PackageVersion Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.12.0" />

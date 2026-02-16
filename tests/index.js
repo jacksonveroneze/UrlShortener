@@ -1,8 +1,7 @@
 import http from "k6/http";
-import { check, sleep } from "k6";
-import { textSummary } from "https://jslib.k6.io/k6-summary/0.0.4/index.js";
+import {check, sleep} from "k6";
 
-import { factoryHeaders } from "./scenarios/util.js";
+import {factoryHeaders, getToken} from "./scenarios/util.js";
 
 /**
  * Teste com duração máxima ~5 minutos:
@@ -27,7 +26,7 @@ import { factoryHeaders } from "./scenarios/util.js";
 
 const BASE_URL = __ENV.BASE_URL || "http://127.0.0.1:8080";
 const ENDPOINT_PATH =
-    __ENV.ENDPOINT_PATH || "/url-shortener-read/v1/urls?id=NjyX6xq";
+    __ENV.ENDPOINT_PATH || "/url-shortener-read/v1/urls?id=K3aBMyr";
 
 const WARMUP_RPS = Number(__ENV.WARMUP_RPS || 200);
 
@@ -45,7 +44,7 @@ const REQUIRE_ZERO_DROPS = (__ENV.REQUIRE_ZERO_DROPS ?? "true")
 function buildStages() {
     const stages = [];
     for (let i = 0; i < STEPS; i++) {
-        stages.push({ target: START_RPS + i * STEP_RPS, duration: "30s" });
+        stages.push({target: START_RPS + i * STEP_RPS, duration: "30s"});
     }
     return stages;
 }
@@ -61,7 +60,7 @@ export const options = {
             duration: "15s",
             preAllocatedVUs: PRE_VUS,
             maxVUs: MAX_VUS,
-            tags: { phase: "warmup", endpoint: "read_url_fixed_id" },
+            tags: {phase: "warmup", endpoint: "read_url_fixed_id"},
             gracefulStop: "0s",
         },
 
@@ -73,7 +72,7 @@ export const options = {
             maxVUs: MAX_VUS,
             startTime: "15s",
             stages: buildStages(),
-            tags: { phase: "step", endpoint: "read_url_fixed_id" },
+            tags: {phase: "step", endpoint: "read_url_fixed_id"},
             gracefulStop: "0s",
         },
     },
@@ -99,13 +98,20 @@ export const options = {
     })(),
 };
 
-export default function () {
+export function setup() {
+    const token = getToken();
+    const headers = factoryHeaders(token);
+
+    return {headers: headers};
+}
+
+export default function (data) {
     const url = `${BASE_URL}${ENDPOINT_PATH}`;
 
     const res = http.get(url, {
         timeout: "5s",
-        headers: factoryHeaders(),
-        tags: { name: "GET /url-shortener-read/v1/urls" },
+        headers: data.headers,
+        tags: {name: "GET /url-shortener-read/v1/urls"},
     });
 
     const ok = check(res, {
@@ -114,10 +120,4 @@ export default function () {
 
     // Micropausa só em caso de erro, para não “loopar quente”.
     if (!ok) sleep(0.01);
-}
-
-export function handleSummary(data) {
-    return {
-        stdout: textSummary(data, { indent: " ", enableColors: true }),
-    };
 }

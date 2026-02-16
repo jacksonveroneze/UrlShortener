@@ -1,8 +1,31 @@
+import http from "k6/http";
 
-export function factoryHeaders() {
+export function factoryHeaders(token) {
     return {
         'Accept': "application/json",
         'X-Correlation-ID': crypto.randomUUID(),
-        'Authorization': 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjRVQzhiOVJFZl83cVlkUDRWUV9JeSJ9.eyJpc3MiOiJodHRwczovL2Rldi1lMWRyN3RlZTVxOGNxZ3prLnVzLmF1dGgwLmNvbS8iLCJzdWIiOiJkTHlOTkVwTnlsZzBRcWtiYkl5azJOM1dNWW5TQTN3cEBjbGllbnRzIiwiYXVkIjoiaHR0cHM6Ly90YXhpLXNlcnZpY2UtYXBpIiwiaWF0IjoxNzcwMjAyOTE4LCJleHAiOjE3NzAyODkzMTgsInNjb3BlIjoidXNlcjpyZWFkIiwiZ3R5IjoiY2xpZW50LWNyZWRlbnRpYWxzIiwiYXpwIjoiZEx5Tk5FcE55bGcwUXFrYmJJeWsyTjNXTVluU0Ezd3AifQ.AZ9TGu3y7KqOuSl7FoHpjlRheUT4cORO7wqlHQsYd_d0vj0MGr_4MD7KlkYO1eUi8VwZjRWY5Q-wjIjYJYkDMNalTuVUHBMBC29fPJ-HMxmcuLpCbUjHhxhgi4za2sYmm7SdTtAzo1GjWMeV9dQeQsOLaicZl-qlo0N_mS4E1FDgAr7PQY3QJJmO68NRtCDZ-2PWxXCXSCcpOzVWjav93AvZkxKoVgK85fW7YAMJpfrY46Fqraf7kbKUzx5tWSPVrviciC2TwHKEtYAB1USdMBwu2qCsuqgSWupfeUZ78Cv-VVVxAx5ynqFY2uhERAYIFwkNIROVV08FTZZnSZK98A'
+        'Authorization': `Bearer ${token}`
     };
+}
+
+export function getToken() {
+    const url = `${__ENV.URL_TOKEN}`;
+    const payload = JSON.stringify({
+        client_id: `${__ENV.CLIENT_ID_TOKEN}`,
+        client_secret: `${__ENV.CLIENT_SECRET_TOKEN}`,
+        audience: `${__ENV.AUDIENCE_TOKEN}`,
+        grant_type: `${__ENV.GRANT_TYPE_TOKEN}`,
+        scope: 'user:read',
+    });
+
+    const params = {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    };
+
+    const res = http.post(url, payload, params);
+    console.log(res.json().access_token)
+    
+    return res.json().access_token;
 }

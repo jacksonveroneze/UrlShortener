@@ -35,6 +35,8 @@ public static class AppServicesExtensions
 
         // Repositories
         services.AddScoped<IShortUrlReadRepository, ShortUrlReadRepository>();
+        services.AddScoped<IShortUrlReadCacheRepository, ShortUrlReadCacheRepository>();
+
         services.AddScoped<IShortUrlRepository, ShortUrlRepository>();
 
         return services;

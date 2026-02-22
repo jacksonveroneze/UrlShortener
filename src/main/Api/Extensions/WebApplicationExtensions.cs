@@ -38,6 +38,7 @@ internal static class WebApplicationExtensions
         // Infra endpoints should remain unauthenticated
         app.UseHealthChecks("/health");
         app.UseMetricServer();
+        app.UseOpenTelemetryPrometheusScrapingEndpoint("metrics-open");
 
         // Security
         app.UseAuthentication();

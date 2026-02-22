@@ -54,9 +54,12 @@ public static class OpenTelemetryExtensions
         private IOpenTelemetryBuilder AddMetrics()
         {
             builder.WithMetrics(opts => opts
+                .AddFusionCacheInstrumentation()
                 .AddProcessInstrumentation()
                 .AddAspNetCoreInstrumentation()
                 .AddHttpClientInstrumentation()
+                .AddMeter("Polly")
+                .AddPrometheusExporter()
                 .AddRuntimeInstrumentation());
 
             return builder;

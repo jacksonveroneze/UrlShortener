@@ -102,18 +102,18 @@ services:
       - traefik.http.services.api_service_write.loadbalancer.healthcheck.scheme=http
 
       # Middlewares definitions
-      - traefik.http.middlewares.strip-prefix.stripprefix.prefixes=/url-shortener-write
-      - traefik.http.middlewares.compress.compress=true
-      - traefik.http.middlewares.rate-limit.ratelimit.average=100000
-      - traefik.http.middlewares.rate-limit.ratelimit.burst=500
-      - traefik.http.middlewares.rate-limit.ratelimit.period=1s
-      - traefik.http.middlewares.body-limit.buffering.maxRequestBodyBytes=2000000
-      - traefik.http.middlewares.retry.retry.attempts=3
-      - traefik.http.middlewares.retry.retry.initialinterval=100ms
-      - traefik.http.middlewares.circuit-breaker.circuitbreaker.expression=LatencyAtQuantileMS(95.0) > 5000
+      - traefik.http.middlewares.strip-prefix-write.stripprefix.prefixes=/url-shortener-write
+      - traefik.http.middlewares.compress-write.compress=true
+      - traefik.http.middlewares.rate-limit-write.ratelimit.average=100000
+      - traefik.http.middlewares.rate-limit-write.ratelimit.burst=5000
+      - traefik.http.middlewares.rate-limit-write.ratelimit.period=1s
+      - traefik.http.middlewares.circuit-breaker-write.circuitbreaker.expression=LatencyAtQuantileMS(95.0) > 5000
+      - traefik.http.middlewares.circuit-breaker-write.circuitbreaker.checkPeriod=2s
+      - traefik.http.middlewares.circuit-breaker-write.circuitbreaker.fallbackDuration=5s
+      - traefik.http.middlewares.circuit-breaker-write.circuitbreaker.recoveryDuration=10s
 
       # Apply middlewares
-      - traefik.http.routers.api_service_write.middlewares=strip-prefix,compress,rate-limit,body-limit,retry
+      - traefik.http.routers.api_service_write.middlewares=strip-prefix-write,compress-write,rate-limit-write,circuit-breaker-write
     networks:
       - url-shortener-service
     logging:
@@ -135,7 +135,7 @@ services:
       
   api-read:
     image: url-shortener-api:latest
-    restart: unless-stopped
+    restart: on-failure:5
     build:
       context: ../../src
       dockerfile: ./Dockerfile
@@ -160,15 +160,12 @@ services:
       - traefik.http.middlewares.strip-prefix-read.stripprefix.prefixes=/url-shortener-read
       - traefik.http.middlewares.compress-read.compress=true
       - traefik.http.middlewares.rate-limit-read.ratelimit.average=100000
-      - traefik.http.middlewares.rate-limit-read.ratelimit.burst=500
+      - traefik.http.middlewares.rate-limit-read.ratelimit.burst=5000
       - traefik.http.middlewares.rate-limit-read.ratelimit.period=1s
-      - traefik.http.middlewares.body-limit-read.buffering.maxRequestBodyBytes=2000000
-      - traefik.http.middlewares.retry-read.retry.attempts=3
-      - traefik.http.middlewares.retry-read.retry.initialinterval=100ms
       - traefik.http.middlewares.circuit-breaker-read.circuitbreaker.expression=LatencyAtQuantileMS(95.0) > 5000
 
       # Apply middlewares
-      - traefik.http.routers.api_service_read.middlewares=strip-prefix-read
+      - traefik.http.routers.api_service_read.middlewares=strip-prefix-read,compress-read,rate-limit-read,circuit-breaker-read
     networks:
       - url-shortener-service
     logging:
@@ -184,7 +181,7 @@ services:
           memory: '512M'
           pids: 100
         reservations:
-          cpus: '0.5'
+          cpus: '1'
           memory: '512M'
       mode: replicated
 

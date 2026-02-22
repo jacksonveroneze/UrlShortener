@@ -13,7 +13,8 @@ public static class DatabaseExtensions
 
     extension(IServiceCollection services)
     {
-        public IServiceCollection AddDatabase(AppConfiguration appConfiguration)
+        public IServiceCollection AddDatabase(
+            AppConfiguration appConfiguration)
         {
             ArgumentNullException.ThrowIfNull(appConfiguration);
             ArgumentNullException.ThrowIfNull(appConfiguration.Database);
@@ -21,7 +22,7 @@ public static class DatabaseExtensions
             ArgumentException.ThrowIfNullOrEmpty(appConfiguration.Database.ReadConnectionString);
 
             services.AddRepository()
-                .InternalAddDatabase<DefaultDbContext>(
+                .InternalAddDatabase<DefaultWriteDbContext>(
                     appConfiguration.Database.WriteConnectionString!)
                 .InternalAddDatabase<DefaultReadDbContext>(
                     appConfiguration.Database.ReadConnectionString!,
@@ -30,7 +31,8 @@ public static class DatabaseExtensions
             return services;
         }
 
-        private IServiceCollection InternalAddDatabase<TContext>(string connectionString,
+        private IServiceCollection InternalAddDatabase<TContext>(
+            string connectionString,
             QueryTrackingBehavior behavior = QueryTrackingBehavior.TrackAll)
             where TContext : DbContext
         {

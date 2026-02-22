@@ -8,7 +8,7 @@ using UrlShortener.Domain.Core.Errors;
 namespace UrlShortener.Application.v1.Urls.GetById;
 
 public sealed class GetByIdShortUrlUseCase(
-    IShortUrlReadCacheRepository shortUrlReadRepository,
+    IShortUrlReadRepository shortUrlReadRepository,
     UrlShortenerParameters parameters) : IGetByIdShortUrlUseCase
 
 {

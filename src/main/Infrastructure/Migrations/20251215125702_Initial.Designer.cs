@@ -11,7 +11,7 @@ using UrlShortener.Infrastructure.Contexts;
 
 namespace UrlShortener.Infrastructure.Migrations
 {
-    [DbContext(typeof(DefaultDbContext))]
+    [DbContext(typeof(DefaultWriteDbContext))]
     [Migration("20251215125702_Initial")]
     partial class Initial
     {

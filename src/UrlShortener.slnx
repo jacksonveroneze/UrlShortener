@@ -25,10 +25,12 @@
   </Folder>
   <Folder Name="/SolutionItems/tests/">
     <File Path="../tests/index.js" />
-    <File Path="../tests/scenarios/driver/driver.js" />
-    <File Path="../tests/scenarios/driver/driver.scenario.js" />
     <File Path="../tests/scenarios/util.js" />
+    <File Path="..\tests\data.json" />
+    <File Path="..\tests\k6-run.sh" />
     <File Path="..\tests\k6.env" />
+    <File Path="..\tests\pgbench-run.sh" />
+    <File Path="..\tests\read_url.sql" />
   </Folder>
   <Folder Name="/src/">
     <Project Path="main/Api/Api.csproj" />

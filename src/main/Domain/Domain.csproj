@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>UrlShortener.Domain</RootNamespace>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="JacksonVeroneze.NET.Pagination"/>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\CrossCutting\CrossCutting.csproj" />
+  </ItemGroup>
+
+
+</Project>

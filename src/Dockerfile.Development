@@ -1,0 +1,34 @@
+# =====================================================
+# Etapa 1: Build
+# =====================================================
+FROM mcr.microsoft.com/dotnet/sdk:10.0-alpine AS build
+
+WORKDIR /src
+
+COPY . .
+
+RUN dotnet restore ./main/Api/Api.csproj
+
+# =====================================================
+# Etapa 2: Publicação
+# =====================================================
+FROM build AS publish
+
+RUN dotnet publish ./main/Api/Api.csproj \
+    --configuration Release \
+    --output /publish \
+    --no-restore \
+    /p:PublishContainer
+
+# =====================================================
+# Etapa Final: Imagem de Runtime
+# =====================================================
+FROM jacksonveroneze/aspnet:10.0-alpine-1.5.0 AS runtime
+
+ENV CORECLR_ENABLE_PROFILING=0
+ENV ASSEMBLY_NAME=UrlShortener.Api.dll
+
+HEALTHCHECK --interval=10s --timeout=1s --start-period=10s --retries=3 \
+  CMD curl --silent --fail http://localhost:8080/health?source=docker-inner || exit 1
+
+COPY --from=publish /publish .

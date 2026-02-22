@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>UrlShortener.Application</RootNamespace>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="FluentValidation"/>
+    <PackageReference Include="Mapster" />
+    <PackageReference Include="JacksonVeroneze.NET.Result"/>
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Microsoft.Extensions.Logging"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Domain\Domain.csproj" />
+  </ItemGroup>
+
+</Project>

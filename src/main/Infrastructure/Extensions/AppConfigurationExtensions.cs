@@ -1,0 +1,51 @@
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using UrlShortener.Application.Common.Parameters;
+using UrlShortener.Infrastructure.Configurations;
+
+namespace UrlShortener.Infrastructure.Extensions;
+
+[ExcludeFromCodeCoverage]
+public static class AppConfigurationExtensions
+{
+    extension(IServiceCollection services)
+    {
+        public IServiceCollection AddAppConfigs(IConfiguration configuration)
+        {
+            ArgumentNullException.ThrowIfNull(configuration);
+
+            services.AddConfiguration<AppConfiguration>(configuration);
+            
+            services.AddConfiguration<ShortCodeHashIdsOptions>(
+                configuration, ShortCodeHashIdsOptions.SectionName);
+            
+            services.AddConfiguration<UrlShortenerParameters>(
+                configuration, UrlShortenerParameters.SectionName);
+
+            return services;
+        }
+
+        private IServiceCollection AddConfiguration<TParameterType>(
+            IConfiguration configuration,
+            string? sectionName = null)
+            where TParameterType : class
+        {
+            ArgumentNullException.ThrowIfNull(configuration);
+
+            IConfiguration section = string.IsNullOrEmpty(sectionName)
+                ? configuration
+                : configuration.GetSection(sectionName);
+
+            services.AddOptions<TParameterType>()
+                .Bind(section)
+                .ValidateDataAnnotations()
+                .ValidateOnStart();
+
+            services.AddScoped<TParameterType>(sp =>
+                sp.GetRequiredService<IOptionsMonitor<TParameterType>>().CurrentValue);
+
+            return services;
+        }
+    }
+}

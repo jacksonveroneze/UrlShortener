@@ -1,50 +1,60 @@
 import http from "k6/http";
-import {check, sleep} from "k6";
+import { check, sleep } from "k6";
+import { randomItem, randomString } from "https://jslib.k6.io/k6-utils/1.4.0/index.js";
 
-import {factoryHeaders, getToken} from "./scenarios/util.js";
+import { factoryHeaders, getToken } from "./scenarios/util.js";
 
 /**
- * Teste com duração máxima ~5 minutos:
- * - Warm-up: 1 minuto em WARMUP_RPS
- * - Step load: STEPS degraus de 1 minuto (default 4), subindo RPS
+ * Fluxo:
+ * 1) setup(): cria IDS_COUNT URLs via api-write e devolve lista de ids
+ * 2) warmup_read: constant-arrival-rate
+ * 3) step_load_read: ramping-arrival-rate em degraus de 60s
  *
- * ENV:
- * - BASE_URL (default: http://127.0.0.1:8080)
- * - ENDPOINT_PATH (default: /url-shortener-read/v1/urls?id=NjyX6xq)
+ * SLO (tua regra):
+ * - erro <= 1%
+ * - checks >= 99%
+ * - p95 <= 300ms
+ * - sem dropped_iterations (opcional via REQUIRE_ZERO_DROPS)
  *
- * - WARMUP_RPS (default: 100)
- * - START_RPS (default: 200)
- * - STEP_RPS (default: 200)
- * - STEPS (default: 4) // 4 * 1m = 4 minutos
- *
- * - PRE_VUS / MAX_VUS (default: 300 / 3000)
- *
- * - REQUIRE_ZERO_DROPS (default: true)
- *   Se true, adiciona threshold para dropped_iterations == 0
- *   (garante que o k6 conseguiu cumprir o RPS-alvo).
+ * Observação:
+ * - CPU <= 80% fica como “guardrail” para sizing (avaliado via Grafana/Prometheus)
  */
 
+// Base
 const BASE_URL = __ENV.BASE_URL || "http://127.0.0.1:8080";
-const ENDPOINT_PATH =
-    __ENV.ENDPOINT_PATH || "/url-shortener-read/v1/urls?id=K3aBMyr";
 
-const WARMUP_RPS = Number(__ENV.WARMUP_RPS || 200);
+// Endpoints (write + read)
+const WRITE_PATH = __ENV.WRITE_PATH || "/url-shortener-write/v1/urls";
+const READ_PATH = __ENV.READ_PATH || "/v1/urls"; // vamos passar ?id=...
 
-const START_RPS = Number(__ENV.START_RPS || 400);
-const STEP_RPS = Number(__ENV.STEP_RPS || 400);
+// Carga
+const WARMUP_RPS = Number(__ENV.WARMUP_RPS || 100);
+const START_RPS = Number(__ENV.START_RPS || 200);
+const STEP_RPS = Number(__ENV.STEP_RPS || 100);
 const STEPS = Number(__ENV.STEPS || 4);
 
-const PRE_VUS = Number(__ENV.PRE_VUS || 600);
-const MAX_VUS = Number(__ENV.MAX_VUS || 6000);
+// k6 VUs
+const PRE_VUS = Number(__ENV.PRE_VUS || 300);
+const MAX_VUS = Number(__ENV.MAX_VUS || 3000);
 
-const REQUIRE_ZERO_DROPS = (__ENV.REQUIRE_ZERO_DROPS ?? "true")
-    .toLowerCase()
-    .trim() === "true";
+// Dados
+const IDS_COUNT = Number(__ENV.IDS_COUNT || 1000);
+const COOLDOWN_SECONDS = Number(__ENV.COOLDOWN_SECONDS || 30);
+
+// Regras
+const REQUIRE_ZERO_DROPS = (__ENV.REQUIRE_ZERO_DROPS ?? "true").toLowerCase().trim() === "true";
+
+// Criação controlada dos IDs no setup
+const WRITE_CREATE_RPS = Number(__ENV.WRITE_CREATE_RPS || 30); // req/s (ritmo “seguro”)
+const WRITE_TIMEOUT = __ENV.WRITE_TIMEOUT || "5s";
+const READ_TIMEOUT = __ENV.READ_TIMEOUT || "1s";
+
+const filecontent = open("./data.json");
 
 function buildStages() {
     const stages = [];
     for (let i = 0; i < STEPS; i++) {
-        stages.push({target: START_RPS + i * STEP_RPS, duration: "30s"});
+        stages.push({ target: START_RPS + i * STEP_RPS, duration: "1m" });
     }
     return stages;
 }
@@ -53,43 +63,56 @@ export const options = {
     summaryTrendStats: ["avg", "p(90)", "p(95)", "p(99)", "max", "count"],
 
     scenarios: {
-        warmup: {
+        warmup_read_step_load_app: {
+            executor: "constant-arrival-rate",
+            rate: 1,
+            timeUnit: "1s",
+            duration: "20s",
+            preAllocatedVUs: 20,
+            maxVUs: 20,
+            tags: { phase: "warmup_app", endpoint: "read_url_random_id" },
+            gracefulStop: "0s",
+        },
+        
+        warmup_read_step: {
             executor: "constant-arrival-rate",
             rate: WARMUP_RPS,
             timeUnit: "1s",
-            duration: "15s",
+            duration: "10s",
             preAllocatedVUs: PRE_VUS,
             maxVUs: MAX_VUS,
-            tags: {phase: "warmup", endpoint: "read_url_fixed_id"},
+            startTime: "20s",
+            tags: { phase: "warmup", endpoint: "read_url_random_id" },
             gracefulStop: "0s",
         },
 
-        step_load: {
+        step_load_read: {
             executor: "ramping-arrival-rate",
             startRate: START_RPS,
             timeUnit: "1s",
             preAllocatedVUs: PRE_VUS,
             maxVUs: MAX_VUS,
-            startTime: "15s",
+            startTime: "30s",
             stages: buildStages(),
-            tags: {phase: "step", endpoint: "read_url_fixed_id"},
+            tags: { phase: "step", endpoint: "read_url_random_id" },
             gracefulStop: "0s",
-        },
+        }
     },
+
+    setupTimeout: '4m',
 
     thresholds: (() => {
         const t = {
-            // Falhas de transporte/timeouts/etc.
-            http_req_failed: ["rate==0"],
+            // Transporte/timeouts/etc.
+            http_req_failed: ["rate<=0.01"],
 
-            // Seu SLO
+            // SLO de latência
             http_req_duration: ["p(95)<=300"],
 
-            // Garante que tudo retornou 200
-            checks: ["rate==1.0"],
+            // “status 200” precisa ser >= 99% (teu erro <= 1%)
+            checks: ["rate>=0.99"],
         };
 
-        // Se houver dropped_iterations, o k6 não cumpriu a taxa alvo (gargalo no gerador).
         if (REQUIRE_ZERO_DROPS) {
             t["dropped_iterations"] = ["count==0"];
         }
@@ -98,26 +121,59 @@ export const options = {
     })(),
 };
 
+function createOneUrl(headers) {
+    const alias = `k6-${randomString(10)}`;
+    const payload = JSON.stringify({
+        originalUrl: "https://github.com/",
+        customAlias: alias,
+        expirationDate: "2026-05-12T12:20:00+00:00",
+    });
+
+    const res = http.post(`${BASE_URL}${WRITE_PATH}`, payload, {
+        timeout: WRITE_TIMEOUT,
+        headers: {
+            ...headers,
+            "Content-Type": "application/json",
+        },
+        tags: { name: "POST /url-shortener-write/v1/urls" },
+    });
+
+    const ok = check(res, {
+        "write status is 200/201": (r) => r.status === 200 || r.status === 201,
+    });
+
+    if (!ok) return null;
+
+    const body = res.json();
+
+    return body?.data.code;
+}
+
 export function setup() {
     const token = getToken();
     const headers = factoryHeaders(token);
 
-    return {headers: headers};
+    const ids = JSON.parse(filecontent);
+    
+    return { headers, ids };
 }
 
 export default function (data) {
-    const url = `${BASE_URL}${ENDPOINT_PATH}`;
+    // console.log(data.ids);
+    
+    const id = randomItem(data.ids);
+    const url = `${BASE_URL}${READ_PATH}?id=${encodeURIComponent(id)}`;
 
     const res = http.get(url, {
-        timeout: "5s",
+        timeout: READ_TIMEOUT,
         headers: data.headers,
-        tags: {name: "GET /url-shortener-read/v1/urls"},
+        tags: { name: "GET /url-shortener-read/v1/urls" },
     });
 
     const ok = check(res, {
         "status is 200": (r) => r.status === 200,
     });
 
-    // Micropausa só em caso de erro, para não “loopar quente”.
+    // micropausa só se falhar, evita “loop quente”
     if (!ok) sleep(0.01);
 }

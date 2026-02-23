@@ -6,8 +6,8 @@ using UrlShortener.Infrastructure.Mappings.Domain;
 namespace UrlShortener.Infrastructure.Contexts;
 
 [ExcludeFromCodeCoverage]
-public class DefaultDbContext(
-    DbContextOptions<DefaultDbContext> options)
+public class DefaultWriteDbContext(
+    DbContextOptions<DefaultWriteDbContext> options)
     : DbContext(options)
 {
     protected override void OnModelCreating(

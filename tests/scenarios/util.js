@@ -15,7 +15,6 @@ export function getToken() {
         client_secret: `${__ENV.CLIENT_SECRET_TOKEN}`,
         audience: `${__ENV.AUDIENCE_TOKEN}`,
         grant_type: `${__ENV.GRANT_TYPE_TOKEN}`,
-        scope: 'user:read',
     });
 
     const params = {
@@ -25,7 +24,6 @@ export function getToken() {
     };
 
     const res = http.post(url, payload, params);
-    console.log(res.json().access_token)
     
     return res.json().access_token;
 }

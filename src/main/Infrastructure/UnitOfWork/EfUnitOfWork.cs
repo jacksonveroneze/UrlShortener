@@ -4,7 +4,7 @@ using UrlShortener.Infrastructure.Contexts;
 namespace UrlShortener.Infrastructure.UnitOfWork;
 
 public class EfUnitOfWork(
-    DefaultDbContext context) : IUnitOfWork
+    DefaultWriteDbContext context) : IUnitOfWork
 {
     public async Task<bool> CommitAsync(
         CancellationToken cancellationToken)

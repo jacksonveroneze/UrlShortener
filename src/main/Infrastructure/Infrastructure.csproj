@@ -34,6 +34,7 @@
     <PackageReference Include="ZiggyCreatures.FusionCache.Serialization.CysharpMemoryPack"/>
     <PackageReference Include="ZiggyCreatures.FusionCache.Serialization.NeueccMessagePack"/>
     <PackageReference Include="ZiggyCreatures.FusionCache.Serialization.SystemTextJson"/>
+    <PackageReference Include="ZiggyCreatures.FusionCache.OpenTelemetry"/>
 
     <PackageReference Include="OpenTelemetry.Extensions.Hosting"/>
     <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore"/>
@@ -44,6 +45,7 @@
     <PackageReference Include="OpenTelemetry.Instrumentation.StackExchangeRedis"/>
     <PackageReference Include="OpenTelemetry.Exporter.Jaeger"/>
     <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol"/>
+    <PackageReference Include="OpenTelemetry.Exporter.Prometheus.AspNetCore" />
   </ItemGroup>
 
   <ItemGroup>

@@ -6,7 +6,7 @@ namespace UrlShortener.Infrastructure.Repositories.ShortUrl;
 
 [ExcludeFromCodeCoverage]
 public class ShortUrlRepository(
-    IEfCoreRepository<Domain.Aggregates.Url.ShortUrl, DefaultDbContext> service)
+    IEfCoreRepository<Domain.Aggregates.Url.ShortUrl, DefaultWriteDbContext> service)
     : IShortUrlRepository
 {
     public async Task CreateAsync(

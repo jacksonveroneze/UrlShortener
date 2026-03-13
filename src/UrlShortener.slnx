@@ -21,6 +21,7 @@
     <File Path="..\infra\docker\tempo.yaml" />
     <File Path=".dockerignore" />
     <File Path="Dockerfile" />
+    <File Path="Dockerfile.DataDog" />
     <File Path="Dockerfile.Development" />
   </Folder>
   <Folder Name="/SolutionItems/tests/">

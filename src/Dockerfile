@@ -2,6 +2,7 @@
 # Build + Publish
 # =====================================================
 FROM mcr.microsoft.com/dotnet/sdk:10.0-noble AS publish
+
 WORKDIR /src
 
 COPY ./main/Api/Api.csproj ./main/Api/
@@ -34,8 +35,10 @@ RUN dotnet publish ./main/Api/Api.csproj \
 # =====================================================
 # Etapa Final: Imagem de Runtime
 # =====================================================
-FROM jacksonveroneze/aspnet:10.0-ubuntu-noble-chiseled-extra-latest AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
 
-COPY --from=publish /publish .
+COPY --from=publish /publish /home/app
 
-ENTRYPOINT ["dotnet", "Api.dll"]
+WORKDIR /home/app
+
+ENTRYPOINT ["dotnet", "/home/app/Api.dll"]

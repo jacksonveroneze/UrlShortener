@@ -24,8 +24,8 @@ import { factoryHeaders, getToken } from "./scenarios/util.js";
 const BASE_URL = __ENV.BASE_URL || "http://127.0.0.1:8080";
 
 // Endpoints (write + read)
-const WRITE_PATH = __ENV.WRITE_PATH || "/url-shortener-write/v1/urls";
-const READ_PATH = __ENV.READ_PATH || "/v1/urls"; // vamos passar ?id=...
+const WRITE_PATH = __ENV.WRITE_PATH || "/url-shortener/v1/urls";
+const READ_PATH = __ENV.READ_PATH || "/url-shortener/v1/urls";
 
 // Carga
 const WARMUP_RPS = Number(__ENV.WARMUP_RPS || 100);

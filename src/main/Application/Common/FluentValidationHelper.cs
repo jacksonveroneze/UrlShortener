@@ -15,17 +15,15 @@ public static class FluentValidationHelper
         IEnumerable<ValidationResult> validationResults =
             validators.Select(validator => validator.Validate(context));
 
-        ValidationFailure[] failures = validationResults
+        ValidationFailure[] failures = [.. validationResults
             .SelectMany(result => result.Errors)
-            .Where(failure => failure != null)
-            .ToArray();
+            .Where(failure => failure != null)];
 
-        Error[] errors = failures
+        Error[] errors = [.. failures
             .Select(failure => Error.Create(
                 failure.ErrorCode,
                 failure.ErrorMessage,
-                failure.PropertyName.ToLowerInvariant()))
-            .ToArray();
+                failure.PropertyName.ToLowerInvariant()))];
 
         return (errors.Length >= 1, errors);
     }

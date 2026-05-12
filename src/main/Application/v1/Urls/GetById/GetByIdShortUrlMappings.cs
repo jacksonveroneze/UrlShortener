@@ -9,7 +9,7 @@ public class GetByIdShortUrlMappings : IRegister
     {
         ArgumentNullException.ThrowIfNull(config);
 
-        config.NewConfig<ShortUrl, GetByIdShortUrlOutput>()
+        _ = config.NewConfig<ShortUrl, GetByIdShortUrlOutput>()
             .Map(dest => dest.Data, src => src);
     }
 }

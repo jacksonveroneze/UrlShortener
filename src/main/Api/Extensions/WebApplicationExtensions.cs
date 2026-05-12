@@ -33,7 +33,7 @@ internal static class WebApplicationExtensions
 
         app.UseHealthChecks("/health");
         app.UseMetricServer();
-        
+
         app.UseOpenTelemetryPrometheusScrapingEndpoint("metrics-open");
 
         app.UseAuthentication();
@@ -44,9 +44,9 @@ internal static class WebApplicationExtensions
         app.Lifetime.ApplicationStarted.Register(() =>
         {
             ILogger logger = app.Services.GetRequiredService<ILogger>();
-            
+
             logger.Information("-> ApplicationStarted");
-            
+
             Log.Information(nameof(IHostApplicationLifetime
                 .ApplicationStarted));
         });
@@ -54,9 +54,9 @@ internal static class WebApplicationExtensions
         app.Lifetime.ApplicationStopping.Register(() =>
         {
             ILogger logger = app.Services.GetRequiredService<ILogger>();
-            
+
             logger.Information("-> ApplicationStopping");
-            
+
             Log.Information(nameof(IHostApplicationLifetime
                 .ApplicationStopping));
         });
@@ -64,9 +64,9 @@ internal static class WebApplicationExtensions
         app.Lifetime.ApplicationStopped.Register(() =>
         {
             ILogger logger = app.Services.GetRequiredService<ILogger>();
-            
+
             logger.Information("-> ApplicationStopped");
-            
+
             Log.Information(nameof(IHostApplicationLifetime
                 .ApplicationStopped));
         });

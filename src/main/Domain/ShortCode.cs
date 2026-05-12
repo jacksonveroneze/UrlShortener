@@ -2,7 +2,7 @@ namespace UrlShortener.Domain;
 
 public sealed class ShortCode : IEquatable<ShortCode>
 {
-// EF Core
+    // EF Core
     private ShortCode() { Value = string.Empty; }
 
 
@@ -22,7 +22,7 @@ public sealed class ShortCode : IEquatable<ShortCode>
     public int ValueLength => Value.Length;
 
 
-    public static ShortCode Create(string value) => new ShortCode(value);
+    public static ShortCode Create(string value) => new(value);
 
 
     public static bool TryCreate(string? value, out ShortCode? result, out string? error)
@@ -39,7 +39,7 @@ public sealed class ShortCode : IEquatable<ShortCode>
 
 
     public bool Equals(ShortCode? other)
-        => other is not null && ReferenceEquals(this, other) || (other is not null && string.Equals(Value, other.Value, StringComparison.OrdinalIgnoreCase));
+        => (other is not null && ReferenceEquals(this, other)) || (other is not null && string.Equals(Value, other.Value, StringComparison.OrdinalIgnoreCase));
 
 
     public override bool Equals(object? obj) => obj is ShortCode sc && Equals(sc);

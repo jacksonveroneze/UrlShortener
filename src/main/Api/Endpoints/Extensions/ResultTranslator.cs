@@ -50,7 +50,7 @@ internal static class ResultTranslator
             object id)
         {
             ArgumentNullException.ThrowIfNull(result);
-        
+
             if (!result.IsSuccess)
             {
                 return result.ToCreatedResult();
@@ -95,6 +95,7 @@ internal static class ResultTranslator
             ResultType.Conflict => StatusCodes.Status409Conflict,
             ResultType.NotFound => StatusCodes.Status404NotFound,
             ResultType.RuleViolation => StatusCodes.Status422UnprocessableEntity,
+            ResultType.Error => StatusCodes.Status500InternalServerError,
             _ => StatusCodes.Status500InternalServerError,
         };
     }
@@ -107,6 +108,7 @@ internal static class ResultTranslator
             ResultType.Conflict => "Conflict Detected",
             ResultType.NotFound => "Resource Not Found",
             ResultType.RuleViolation => "Business Rule Violation",
+            ResultType.Success => "Success",
             ResultType.Error => "Internal Server Error",
             _ => "Operation Failed",
         };

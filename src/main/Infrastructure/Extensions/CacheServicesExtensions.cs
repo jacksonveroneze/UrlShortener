@@ -62,7 +62,7 @@ public static class CacheServicesExtensions
                 options.AllowBackgroundDistributedCacheOperations = true;
                 options.AllowTimedOutFactoryBackgroundCompletion = true;
             });
-        
+
         return services;
     }
 }

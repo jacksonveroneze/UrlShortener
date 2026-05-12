@@ -10,7 +10,7 @@ public sealed record AppConfiguration
     public AuthConfiguration? Auth { get; init; }
 
     public DatabaseConfiguration? Database { get; init; }
-    
+
     public CacheConfiguration? Cache { get; init; }
 
     public string AppName =>

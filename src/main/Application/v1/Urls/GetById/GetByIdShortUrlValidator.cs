@@ -7,10 +7,10 @@ public class GetByIdShortUrlValidator
 {
     public GetByIdShortUrlValidator()
     {
-        RuleFor(request => request)
+        _ = RuleFor(request => request)
             .NotNull();
 
-        RuleFor(request => request.Code)
+        _ = RuleFor(request => request.Code)
             .Cascade(CascadeMode.Stop)
             .NotNull()
             .NotEmpty();

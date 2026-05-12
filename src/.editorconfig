@@ -101,6 +101,13 @@ dotnet_diagnostic.S2094.severity = suggestion
 dotnet_diagnostic.CA1515.severity = none
 
 ########################################
+# IDE diagnostics
+########################################
+
+dotnet_diagnostic.IDE0046.severity = none
+dotnet_diagnostic.IDE0058.severity = none
+
+########################################
 # Meziantou.MA0051 (métodos longos)
 ########################################
 

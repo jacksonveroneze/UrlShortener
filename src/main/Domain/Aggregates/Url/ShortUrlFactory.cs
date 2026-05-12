@@ -8,7 +8,7 @@ public static class ShortUrlFactory
         ShortCode? code,
         Uri originalUrl,
         DateTimeOffset? expiresdAt,
-        DateTimeOffset nowUtc)
+        DateTimeOffset _)
     {
         ArgumentNullException.ThrowIfNull(originalUrl);
         // ArgumentNullException.ThrowIfNull(policy);

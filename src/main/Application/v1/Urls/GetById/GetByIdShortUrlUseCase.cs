@@ -39,8 +39,8 @@ public sealed class GetByIdShortUrlUseCase(
     {
         UriBuilder uriBuilder = new()
         {
-            Scheme = parameters.Scheme!,
-            Host = parameters.BaseDomain!,
+            Scheme = parameters.Scheme,
+            Host = parameters.BaseDomain,
             Query = $"{parameters.QueryStringName}={code}",
         };
 

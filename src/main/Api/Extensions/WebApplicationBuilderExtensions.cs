@@ -12,24 +12,24 @@ internal static class WebApplicationBuilderExtensions
         {
             builder.Host.ConfigureHostOptions(options =>
                 options.ShutdownTimeout = TimeSpan.FromSeconds(10));
-        
+
             builder.Configuration
                 .AddEnvironmentVariables("APP_CONFIG_");
 
             builder.Services.AddAppConfigs(builder.Configuration);
-        
+
             ServiceProvider serviceProvider = builder.Services
                 .BuildServiceProvider();
-        
+
             AppConfiguration appConfiguration = serviceProvider
                 .GetRequiredService<AppConfiguration>();
-        
+
             builder.ConfigureDefaultServices(appConfiguration);
-        
+
             builder.AddLogger(appConfiguration);
-        
+
             MetricsExtensions.AddMetrics();
-        
+
             return builder;
         }
 

@@ -10,8 +10,8 @@ public sealed class ShortUrlPolicy
         int codeMaxLength,
         int aliasMinLength,
         int aliasMaxLength,
-        IEnumerable<string>? reservedAliases,
-        IEnumerable<string>? blockedAliases,
+        IEnumerable<string>? _,
+        IEnumerable<string>? __,
         TimeSpan minExpiration,
         TimeSpan maxExpiration)
     {
@@ -41,7 +41,7 @@ public sealed class ShortUrlPolicy
         MinExpiration = minExpiration;
         MaxExpiration = maxExpiration;
 
-        _alphabet = new HashSet<char>(allowedAlphabet);
+        _alphabet = [.. allowedAlphabet];
     }
 
 
@@ -67,12 +67,8 @@ public sealed class ShortUrlPolicy
             return true; // Sem expiração é válido
         }
 
-        if (expiresAtUtc <= nowUtc + MinExpiration)
-        {
-            return false;
-        }
-
-        return !(expiresAtUtc > nowUtc + MaxExpiration);
+        return expiresAtUtc > nowUtc + MinExpiration
+               && !(expiresAtUtc > nowUtc + MaxExpiration);
     }
 
     private static bool LengthBetween(int length, int min, int max)
@@ -82,6 +78,6 @@ public sealed class ShortUrlPolicy
 
     private bool AllCharsAllowed(string value)
     {
-        return value.All(t => _alphabet.Contains(t));
+        return value.All(_alphabet.Contains);
     }
 }

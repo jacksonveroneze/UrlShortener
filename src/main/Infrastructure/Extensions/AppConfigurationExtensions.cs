@@ -16,10 +16,10 @@ public static class AppConfigurationExtensions
             ArgumentNullException.ThrowIfNull(configuration);
 
             services.AddConfiguration<AppConfiguration>(configuration);
-            
+
             services.AddConfiguration<ShortCodeHashIdsOptions>(
                 configuration, ShortCodeHashIdsOptions.SectionName);
-            
+
             services.AddConfiguration<UrlShortenerParameters>(
                 configuration, UrlShortenerParameters.SectionName);
 

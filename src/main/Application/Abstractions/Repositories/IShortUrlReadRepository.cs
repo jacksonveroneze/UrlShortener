@@ -4,7 +4,7 @@ namespace UrlShortener.Application.Abstractions.Repositories;
 
 public interface IShortUrlReadRepository
 {
-    public Task<ShortUrl?> GetByCodeAsync(
+    Task<ShortUrl?> GetByCodeAsync(
         string code,
         CancellationToken cancellationToken);
 }

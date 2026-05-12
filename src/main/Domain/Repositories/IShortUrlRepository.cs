@@ -4,7 +4,7 @@ namespace UrlShortener.Domain.Repositories;
 
 public interface IShortUrlRepository
 {
-    public Task CreateAsync(
+    Task CreateAsync(
         ShortUrl entity,
         CancellationToken cancellationToken);
 }

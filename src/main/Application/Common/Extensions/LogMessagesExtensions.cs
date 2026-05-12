@@ -26,7 +26,7 @@ public static partial class LogMessagesExtensions
         Message = "{contextName} - {className} - {methodName} - Error - " +
                   "Identifier: '{identifier}' - Message: '{message}'")]
     public static partial void LogGenericError(this ILogger logger,
-        string contextName, string className, string methodName, 
+        string contextName, string className, string methodName,
         Guid identifier, string message);
 
     #endregion
@@ -54,9 +54,9 @@ public static partial class LogMessagesExtensions
         Message = "{contextName} - {className} - {methodName} - " +
                   "Identifier: '{identifier}' - RuleViolation - Message: '{message}'")]
     public static partial void LogRuleViolation(this ILogger logger,
-        string contextName, string className, string methodName, 
+        string contextName, string className, string methodName,
         Guid identifier, string message);
-    
+
     #endregion
 
     #region CommonAlreadyExists
@@ -101,7 +101,7 @@ public static partial class LogMessagesExtensions
     public static partial void LogGetById(this ILogger logger,
         string contextName, string className, string methodName,
         Guid id);
-    
+
     [LoggerMessage(
         EventId = 1041,
         Level = LogLevel.Information,

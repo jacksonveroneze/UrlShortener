@@ -10,22 +10,22 @@ public class CreateShortUrlValidator
 
     public CreateShortUrlValidator()
     {
-        RuleFor(request => request)
+        _ = RuleFor(request => request)
             .NotNull();
 
-        RuleFor(request => request.OriginalUrl)
+        _ = RuleFor(request => request.OriginalUrl)
             .Cascade(CascadeMode.Stop)
             .NotNull()
             .NotEmpty();
 
-        RuleFor(request => request.CustomAlias)
+        _ = RuleFor(request => request.CustomAlias)
             .Cascade(CascadeMode.Stop)
             .NotNull()
             .NotEmpty()
             .Length(MinLengthCustomAlias, MaxLengthCustomAlias)
             .Must(value => value!.All(char.IsAsciiLetterOrDigit));
 
-        RuleFor(request => request.ExpirationDate)
+        _ = RuleFor(request => request.ExpirationDate)
             .Cascade(CascadeMode.Stop)
             .NotNull();
     }

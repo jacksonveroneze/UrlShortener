@@ -1,7 +1,7 @@
 # =====================================================
 # Build + Publish
 # =====================================================
-FROM mcr.microsoft.com/dotnet/sdk:10.0-noble AS publish
+FROM mcr.microsoft.com/dotnet/sdk:11.0-preview-noble AS publish
 WORKDIR /src
 
 COPY ./main/Api/Api.csproj ./main/Api/
@@ -40,7 +40,7 @@ RUN mkdir -p /empty
 # =====================================================
 # Etapa Final: Imagem de Runtime
 # =====================================================
-FROM jacksonveroneze/aspnet:10.0-ubuntu-noble-chiseled-extra-latest AS runtime
+FROM jacksonveroneze/aspnet:11.0-ubuntu-noble-chiseled-extra-latest AS runtime
 
 ENV CORECLR_ENABLE_PROFILING=1
 ENV CORECLR_PROFILER={846F5F1C-F9AE-4B07-969E-05C26BC060D8}

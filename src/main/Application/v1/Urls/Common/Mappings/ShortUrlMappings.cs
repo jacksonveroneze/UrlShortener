@@ -10,7 +10,7 @@ public class ShortUrlMappings : IRegister
     {
         ArgumentNullException.ThrowIfNull(config);
 
-        config.NewConfig<ShortUrl, ShortUrlOutput>()
+        _ = config.NewConfig<ShortUrl, ShortUrlOutput>()
             .Map(dest => dest.Code, src => src.Code)
             .Map(dest => dest.CreationDate, src => src.CreatedAt)
             .Map(dest => dest.ExpirationDate, src => src.ExpiresAt)

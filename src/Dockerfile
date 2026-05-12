@@ -1,7 +1,7 @@
 # =====================================================
 # Build + Publish
 # =====================================================
-FROM mcr.microsoft.com/dotnet/sdk:10.0-noble AS publish
+FROM mcr.microsoft.com/dotnet/sdk:11.0-preview-noble AS publish
 
 WORKDIR /src
 
@@ -35,7 +35,7 @@ RUN dotnet publish ./main/Api/Api.csproj \
 # =====================================================
 # Etapa Final: Imagem de Runtime
 # =====================================================
-FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:11.0-preview AS runtime
 
 COPY --from=publish /publish /home/app
 

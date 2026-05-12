@@ -1,12 +1,10 @@
 using JacksonVeroneze.NET.Result;
-using UrlShortener.Application.Abstractions.Repositories;
 using UrlShortener.Application.Abstractions.Services;
 using UrlShortener.Application.Abstractions.Uow;
 using UrlShortener.Application.Common.Parameters;
 using UrlShortener.Application.v1.Urls.Common.Models;
 using UrlShortener.Domain;
 using UrlShortener.Domain.Aggregates.Url;
-using UrlShortener.Domain.Core.Errors;
 using UrlShortener.Domain.Repositories;
 
 namespace UrlShortener.Application.v1.Urls.Create;
@@ -38,7 +36,7 @@ public sealed class CreateShortUrlUseCase(
             clock.UtcNow);
 
         await urlRepository.CreateAsync(shortUrl.Value!, cancellationToken);
-        await unitOfWork.CommitAsync(cancellationToken);
+        _ = await unitOfWork.CommitAsync(cancellationToken);
 
         Uri uri = ComposeShortenerUrl(code);
 
@@ -52,8 +50,8 @@ public sealed class CreateShortUrlUseCase(
     {
         UriBuilder uriBuilder = new()
         {
-            Scheme = parameters.Scheme!,
-            Host = parameters.BaseDomain!,
+            Scheme = parameters.Scheme,
+            Host = parameters.BaseDomain,
             Query = $"{parameters.QueryStringName}={code}",
         };
 

@@ -36,7 +36,7 @@ public static class OpenTelemetryExtensions
         services.AddOpenTelemetry()
             .ConfigureResource(ConfigureResource)
             .AddMetrics();
-            //.AddTracing(appConfiguration);
+        //.AddTracing(appConfiguration);
 
         return services;
 
